@@ -1,0 +1,250 @@
+﻿@model AUEUMS.View_Models.AUEUMSRegisterViewModel
+@{
+    Layout = null;
+}
+<!DOCTYPE html>
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Al Shirawi - SPC DESIGN PLUS 2.0</title>
+    <link href="~/css/main.87c0748b313a1dda75f5.css" rel="stylesheet">
+    <script type="text/javascript" src="~/scripts/main.87c0748b313a1dda75f5.js"></script>
+
+    <script src="https://www.google.com/recaptcha/api.js"></script>
+    <style>
+        #g-recaptcha-response {
+            display: block !important;
+            position: absolute;
+            margin: -78px 0 0 0 !important;
+            width: 302px !important;
+            height: 76px !important;
+            z-index: -999999;
+            opacity: 0;
+        }
+    </style>
+
+</head>
+<body>
+    <div class="app-container app-theme-white body-tabs-shadow">
+        <div class="app-container">
+            <div class="h-100">
+                <div class="h-100 no-gutters row">
+                    <div class="d-none d-lg-block col-lg-4">
+                        <div class="slider-light">
+                            <div class="slick-slider">
+                                <div>
+                                    <div class="position-relative h-100 d-flex justify-content-center align-items-center bg-plum-plate" tabindex="-1">
+                                        <div class="slide-img-bg" style="background-image: url('../assets/images/originals/OCC1.jpg');"></div>
+                                          <div class="slider-content">
+                                            <h3>Oasis Coils & Coatings</h3>
+                                            <p>Oasis Coils & Coatings (OCC) is a technology-driven company and a specialist in the manufacturing and coating of HVAC coils.</p>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div>
+                                    <div class="position-relative h-100 d-flex justify-content-center align-items-center bg-sunny-morning" tabindex="-1">
+                                        <div class="slide-img-bg" style="background-image: url('../assets/images/originals/OCC5.jpg');"></div>
+                                        @*<div class="slider-content">
+                                            <h3>Leminar Air Conditioning Company</h3>
+                                            <p>At Leminar Air Conditioning Company, we realise that through our business activities and initiatives we can contribute to the overall wellbeing of the communities in which we operate.</p>
+                                        </div>*@
+                                    </div>
+                                </div>
+                                <div>
+                                    <div class="position-relative h-100 d-flex justify-content-center align-items-center bg-sunny-morning" tabindex="-1">
+                                        <div class="slide-img-bg" style="background-image: url('../assets/images/originals/OCC3.jpg');"></div>
+                                        @*<div class="slider-content">
+                                            <h3>Secure Parking</h3>
+                                            <p>As the world’s most innovative car park solutions provider, Secure Parking has the vision, experience, expertise and flexibility to assist you to maximise the value and potential of your car park asset.</p>
+                                        </div>*@
+                                    </div>
+                                </div>
+                                <div>
+                                    <div class="position-relative h-100 d-flex justify-content-center align-items-center bg-sunny-morning" tabindex="-1">
+                                        <div class="slide-img-bg" style="background-image: url('../assets/images/originals/OCC4.jpg');"></div>
+                                        @*<div class="slider-content">
+                                            <h3>Clima Uno</h3>
+                                            <p>Clima Uno is a well-established brand for air-handling units and fan coil units, which originated in Italy and is today owned by the Al Shirawi Group of Companies. Clima Uno’s Eurovent-certified product range is custom-built for maximum performance in the region’s harsh climatic conditions.</p>
+                                        </div>*@
+                                    </div>
+                                </div>
+                                <div>
+                                    <div class="position-relative h-100 d-flex justify-content-center align-items-center bg-sunny-morning" tabindex="-1">
+                                        <div class="slide-img-bg" style="background-image: url('../assets/images/originals/OCC8.jpg');"></div>
+                                        @*<div class="slider-content">
+                                            <h3>Oasis Coils & Coatings</h3>
+                                            <p>Oasis Coils & Coatings (OCC) is a technology-driven company and a specialist in the manufacturing and coating of HVAC coils.</p>
+                                        </div>*@
+                                    </div>
+                                </div>
+                                @*<div>
+                                    <div class="position-relative h-100 d-flex justify-content-center align-items-center bg-sunny-morning" tabindex="-1">
+                                        <div class="slide-img-bg" style="background-image: url('../assets/images/originals/asco.jpg');"></div>
+                                        <div class="slider-content">
+                                            <h3>Al Shirawi Contracting</h3>
+                                            <p>Al Shirawi Contracting Company is a market leader in the specialist field of Waterproofing..</p>
+                                        </div>
+                                    </div>
+                                </div>*@
+                                @*<div>
+                                    <div class="position-relative h-100 d-flex justify-content-center align-items-center bg-sunny-morning" tabindex="-1">
+                                        <div class="slide-img-bg" style="background-image: url('../assets/images/originals/lai.jpg');"></div>
+                                        <div class="slider-content">
+                                            <h3>leminar air conditioning industries</h3>
+                                            <p>Leminar Air Conditioning Industries LLC, is a duct work manufacturing firm established in the year 2000 manufactures sheet metal products and acoustic products that meet the exclusive needs of HVAC contractors.</p>
+                                        </div>
+                                    </div>
+                                </div>*@
+                            </div>
+
+                        </div>
+                    </div>
+                    <div class="h-100 d-flex bg-white justify-content-center align-items-center col-md-12 col-lg-8">
+                        <div class="mx-auto app-login-box col-sm-12 col-md-10 col-lg-9">
+
+                            <h4 class="mb-0">
+                                @*<span class="d-block">Welcome,</span>
+                                    <span>Please sign in to your account.</span>*@
+                            </h4>
+
+                            @*<div class="divider row">
+                                </div>*@
+                        <div class="widget-content-right">
+                            <h5 class="card-title"></h5>
+
+                            <h5 class="card-title"><label id="prjTitle">Register</label></h5>
+
+                           
+                            <form id="formidRegister" class="needs-validation" asp-action="AddAUEUMSUser" method="post">
+
+                                <div class="form-row">
+
+                                    <div class="col-md-6">
+                                        <label for="lblFirstName" class="">First Name</label>
+                                        <div class="input-group">
+                                            <input asp-for="FirstName" placeholder="" type="text" class="form-control" required maxlength="75">
+                                        </div>
+                                    </div>
+
+                                    <div class="col-md-6 ">
+                                        <label for="lblLastName" class="">Last Name</label>
+                                        <div class="input-group">
+                                            <input asp-for="LastName" placeholder="" type="text" class="form-control" required maxlength="75">
+                                        </div>
+                                    </div>
+
+                                </div>
+
+                                <div class="form-row">
+
+                                    <div class="col-md-6 ">
+                                        <label for="lblCompany" class="">Company</label>
+                                        <div class="input-group">
+                                          @*   <input asp-for="Company" placeholder="" type="text" class="form-control" required maxlength="100">
+                                      *@   </div>
+                                    </div>
+
+                                    <div class="col-md-6">
+                                        <label for="lblCity" class="">City</label>
+                                        <div class="input-group">
+                                            <input asp-for="City" placeholder="" type="text" class="form-control" required maxlength="100">
+                                        </div>
+                                    </div>
+
+
+                                </div>
+
+
+                                <div class="form-row">
+
+                                    <div class="col-md-6">
+                                        <label for="lblCountry" class="">Country</label>
+                                        <div class="input-group">
+                                          @*   <select asp-for="CountryID" class="form-control"
+                                                    asp-items="@(new SelectList(Model.CountryList, "DisplayID", "DisplayValue",Model.CountryID))" required>
+                                            </select> *@
+                                        </div>
+
+                                    </div>
+
+                                    <div class="col-md-6">
+                                        <label for="lblEmail" class="">Email</label>
+                                        <div class="input-group">
+                                            <input asp-for="Email" placeholder="" type="email" class="form-control" required maxlength="100">
+                                        </div>
+                                    </div>
+
+                                </div>
+
+                                <div class="form-row">
+
+                                    <div class="col-md-6">
+                                        <label for="lblPassword" class="">Password</label>
+                                        <div class="input-group">
+                                            <input asp-for="Password" placeholder="" type="password" class="form-control" required maxlength="50">
+                                        </div>
+                                    </div>
+
+                                    <div class="col-md-6 mb-2">
+                                        <label for="lblConfirmPassword" class="">Confirm Password</label>
+                                        <div class="input-group">
+                                            <input asp-for="confirmPwd" placeholder="" type="password" class="form-control" required maxlength="50">
+                                        </div>
+                                    </div>
+
+                                </div>
+                                <div class="form-row mb-2">
+                                    <div class="col-md-12 position-relative form-group">
+                                            <div class="g-recaptcha" data-sitekey="6LcNeDwjAAAAAOjmFbZsd2tkWasbz_Kto_EcUxMQ"></div>
+                                     
+                                    </div>
+                                </div>
+
+
+                                <div class="form-row mb-2">
+                                    <div class="col-md-12 position-relative form-group">
+                                        <div class="position-relative form-group"><label style="color:red;font-weight:normal;">@Model.errormessage</label></div>
+                                    </div>
+                                </div>
+
+                                <div class="form-row mb-2">
+
+                                    <div class="col-md-6 position-relative form-group">
+                                        <button class="mt-1 btn btn-gradient-info" id="tbnSubmit" type="submit">Submit</button>
+                                        <button class="mt-1 btn btn-gradient-light" id="tbnCancelSubmit" type="reset">Reset</button>
+
+                                    </div>
+                                </div>
+
+
+                                <input type="hidden" asp-for="ReturnUrl" />
+                            </form>
+                            <div class="position-relative form-group mb-2">
+                                <a asp-action="AUEUMSLogin" style="cursor: pointer;padding-right: 18px;">
+                                    <i style="color:#3f6ad8;font-size:smaller;font-weight:bold;">Back to Login</i>
+                                </a>
+                            </div>
+
+                        </div>
+
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</body>
+</html>
+<script>
+    window.onload = function () {
+        var $recaptcha = document.querySelector('#g-recaptcha-response');
+        if ($recaptcha) {
+            $recaptcha.setAttribute("required", "required");
+        };
+    $(document).ready(function () {
+
+    });
+    
+</script>

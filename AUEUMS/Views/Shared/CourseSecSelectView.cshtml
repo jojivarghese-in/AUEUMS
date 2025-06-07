@@ -1,0 +1,11 @@
+﻿@model AUEUMS.View_Models.CourseSectionListViewModel
+
+@Html.AntiForgeryToken()
+<label for="TimetableDetail" class="">Course Section</label>
+<select asp-for="typeCourseSec" name="selCourseSec" id="selCourseSec" class="form-control"
+        asp-items="@(new SelectList(Model.CtnrCourseSeclist,"Id","ClassName",Model.typeCourseSec))">
+    <option value="">Select</option>
+</select>   
+
+
+

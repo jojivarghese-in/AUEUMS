@@ -1,0 +1,168 @@
+﻿@model AUEUMS.View_Models.TimetableDetailListViewModel
+
+@Html.Hidden("GetTimetableDetailsListJSON", Url.Action("getTimetableDetailsByHdrIdJSON", "Admin"))
+@Html.AntiForgeryToken()
+
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+@addTagHelper *, AuthoringTagHelpers
+@{
+    var usrRoles = User.Claims.FirstOrDefault(x => x.Type == System.Security.Claims.ClaimTypes.Role).Value;
+}
+<style type="text/css">
+
+    .red-input:focus {
+        color: red;
+    }
+
+    .blue-input {
+        color: Highlight;
+    }
+
+    .brown-input {
+        color: saddlebrown;
+    }
+</style>
+
+
+<div id="divTimetableDetails" class="table-responsive">
+
+    <table id="TimetableDetailsItems" class="table table-bordered table-striped table-condensed display" width="100%">
+        <thead>
+            <tr>
+                <th width="20px"></th>
+                <th width="80px">SemesterType</th>
+                <th width="80px">SemesterYear</th>
+              
+            </tr>
+        </thead>
+
+    </table>
+</div>
+
+<script>
+
+    var $ = $.noConflict();
+    $(document).ready(function () {
+
+      $.ajaxSetup({
+            beforeSend: function (xhr) {
+                xhr.setRequestHeader("RequestVerificationToken",
+                    $('input:hidden[name="__RequestVerificationToken"]').val());
+            },
+        });
+
+        var groupColumn = 1;
+       
+      
+        var grp="CourseName";
+
+
+           var contactsTablec = $("#TimetableDetailsItems").DataTable({
+            processing: true,
+            serverSide: true,
+            ordering: true,
+            lengthMenu: [10, 25, 50, 100, 500, 1000],
+            dom: 'Qlfrtip',
+            search: {
+                return: true
+            },
+            ajax: function (data, callback, settings) {
+                $.ajax({
+                    url: "/Admin/GetAllQuotesJson",
+                    type: "Post",
+                    dataType: "json",
+                    contentType: "application/json",
+                    data: JSON.stringify({
+                        'Id': parseInt(0), 'src': 'external', 'draw': data.draw, 'start': data.start, 'length': data.length, 'column': data.columns[data.order[0].column].data, 'dir': data.order[0].dir, 'searchStr': data.search.value
+                    }),
+                    success: function (response, textStatus, jQxhr) {
+                        callback({
+                            //draw: response.draw,
+
+                            data: response.data,
+                            recordsTotal: response.recordsTotal,
+                            recordsFiltered: response.recordsFiltered
+
+
+                        })
+                    },
+                    error: function (jqXhr, textStatus, errorThrown) {
+
+                    }
+
+                });
+            },
+            "columns": [
+                {
+                    "data": "Id",
+                    "type": "int",
+                    "render": function (data, type, row, meta) {
+                        return "<div class='text-center' hidden>" + row.Id + "</div>";
+                    }
+                },
+                
+                { "data": "SemesterType" },
+                { "data": "SemesterYear" },
+         
+
+         
+
+            ],
+            "columnDefs": [{
+                "targets": [0],
+                "visible": false,
+                "searchable": false
+            },
+            {
+                "targets": [0],
+                "orderable": false,
+                "searchable": false
+            }
+            ],
+            "order": [[0, 'desc']],
+            "dom": '<"top"Bfl>iprt<"bottom">p<"clear">',
+            "stateSave": true,
+
+            "buttons": [
+                {
+                    "extend": 'excel',
+                    "className": 'btn btn-outline-secondary',
+                    "exportOptions": {
+                        "columns": [1, 2]
+                    }
+                }
+
+            ]
+
+        });
+
+
+
+
+    });
+
+  
+    function getUrlParameter(name, uri) {
+        name = name.replace(/[\[]/, '\\[').replace(/[\]]/, '\\]');
+        var regex = new RegExp('[\\?&]' + name + '=([^&#]*)');
+        var results = regex.exec(uri);
+        return results === null ? '' : decodeURIComponent(results[1].replace(/\+/g, ' '));
+    }
+</script>
+
+<style>
+    thead input {
+        width: 100%;
+    }
+
+    td.details-control {
+        background: url('../images/details_open.png') no-repeat center center;
+        cursor: pointer;
+    }
+
+    tr.shown td.details-control {
+        background: url('../images/details_close.png') no-repeat center center;
+    }
+</style>
+
+

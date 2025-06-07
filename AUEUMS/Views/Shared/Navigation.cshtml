@@ -1,0 +1,293 @@
+﻿@{
+    @Html.Hidden("NewProject", Url.Action("NewProject", "Admin"))
+
+    @Html.Hidden("ProjectList", Url.Action("Project", "Admin"))
+    @Html.Hidden("ProjectAllInbox", Url.Action("ProjectAllInbox", "Admin"))
+    @Html.Hidden("ProjectListAll", Url.Action("ProjectAll", "Admin"))
+
+    @Html.Hidden("GetReportByProjectView", Url.Action("GetReportByProjectView", "Admin"))
+
+    @Html.Hidden("GetAllProjectsView", Url.Action("GetAllProjectsView", "Admin"))
+
+    @Html.Hidden("AccountList", Url.Action("Account", "Admin"))
+    @Html.Hidden("AccountListAll", Url.Action("AccountAll", "Admin"))
+
+    @Html.Hidden("ContactList", Url.Action("Contacts", "Admin"))
+    @Html.Hidden("ContactListAll", Url.Action("ContactsAll", "Admin"))
+
+
+    @Html.Hidden("AUEUMSRegisters", Url.Action("AUEUMSRegisters", "Admin"))
+    @Html.Hidden("AUEUMSRegisterAll", Url.Action("AUEUMSRegisterAll", "Admin"))
+    @Html.Hidden("RefreshAUEUMSRegister", Url.Action("RefreshAUEUMSRegister", "Admin"))
+
+
+    @Html.Hidden("CVValues", Url.Action("CVValues", "Admin"))
+    @Html.Hidden("CVValuesAll", Url.Action("CVValuesAll", "Admin"))
+    @Html.Hidden("RefreshCVValues", Url.Action("RefreshCVValues", "Admin"))
+
+    @Html.Hidden("Currencies", Url.Action("Currencies", "Admin"))
+    @Html.Hidden("CurrencyAll", Url.Action("CurrencyAll", "Admin"))
+    @Html.Hidden("RefreshCurrency", Url.Action("RefreshCurrency", "Admin"))
+
+    @Html.Hidden("Product", Url.Action("Product", "Admin"))
+    @Html.Hidden("ProductAll", Url.Action("ProductAll", "Admin"))
+    @Html.Hidden("RefreshProduct", Url.Action("RefreshProduct", "Admin"))
+
+
+    @Html.Hidden("NewCRMQuote", Url.Action("NewCRMQuote", "CRM"))
+    @Html.Hidden("QuoteManager", Url.Action("LoadQuoteManager", "Admin"))
+
+    @Html.Hidden("QuoteList", Url.Action("getQuoteListPartialViewForContainer", "QuoteManager"))
+
+
+    @Html.Hidden("DefaultQuick", Url.Action("DefaultQuick", "Admin"))
+    @Html.AntiForgeryToken()
+}
+<div class="scrollbar-sidebar">
+    <div class="app-sidebar__inner">
+        <ul class="vertical-nav-menu">
+
+            @*<li>
+            <a href="~/Admin/Dashboard">
+                <i class="metismenu-icon lnr-calendar-full icon-gradient bg-heavy-rain"></i>
+                Latest Updates
+            </a>
+        </li>*@
+
+            @{
+                var usrRoles = User.Claims.FirstOrDefault(x => x.Type == System.Security.Claims.ClaimTypes.Role).Value;
+            }
+
+            @if (usrRoles == "Administrator" || usrRoles == "SalesEngineer")
+            {
+                @*<li id="fouthcli">
+                <a id="mnuprojectmaster" href="#">
+                    <i class="metismenu-icon lnr-enter icon-gradient bg-heavy-rain"></i>
+                    Inbox
+                </a>
+            </li>*@
+            }
+
+
+            <li id="secondcli">
+                <a id="mnuProjectMaster" href="#">
+                    <i class="metismenu-icon lnr-earth icon-gradient bg-heavy-rain"></i>
+                    Projects
+                </a>
+            </li>
+
+            <li id="fouthcli">
+                <a id="mnuAddProject" href="#">
+                    <i class="metismenu-icon lnr-enter icon-gradient bg-heavy-rain"></i>
+                    Add New Project
+                </a>
+            </li>
+
+            <li id="thirdli">
+                <a id="mnuusermaster" href="#">
+                    <i class="metismenu-icon lnr-user icon-gradient bg-heavy-rain"></i>
+                    User Manager
+                </a>
+            </li>
+
+            <li id="fifthcli">
+                <a id="mnucvvalue" href="#">
+                    <i class="metismenu-icon lnr-chart-bars icon-gradient bg-heavy-rain"></i>
+                    Cost Variables
+                </a>
+            </li>
+
+            <li id="sixthcli">
+                <a id="mnucurrencies" href="#">
+                    <i class="metismenu-icon lnr-book icon-gradient bg-heavy-rain"></i>
+                    Exchange Rates
+                </a>
+            </li>
+            <li id="eighthcli">
+                <a id="mnuproducts" href="#">
+                    <i class="metismenu-icon pe-7s-ball icon-gradient bg-heavy-rain"></i>
+                    Products
+                </a>
+            </li>
+
+            <li id="ninecli">
+                <a id="mnuCRMQuote" href="#">
+                    <i class="metismenu-icon pe-7s-network icon-gradient bg-heavy-rain"></i>
+                    CRM Quote
+                </a>
+            </li>
+            <li id="tencli">
+                <a id="mnuQuoteManager" href="#">
+                    <i class="metismenu-icon pe-7s-share icon-gradient bg-heavy-rain"></i>
+                    Quote Manager
+                </a>
+            </li>
+            <li id="eleventhcli">
+                <a id="mnuQuoteList" href="#">
+                    <i class="metismenu-icon pe-7s-menu icon-gradient bg-heavy-rain"></i>
+                    Quote
+                </a>
+            </li>
+
+        </ul>
+    </div>
+
+</div>
+
+<script>
+
+
+
+    $(document).ready(function () {
+        $.ajaxSetup({
+            beforeSend: function (xhr) {
+                xhr.setRequestHeader("RequestVerificationToken",
+                    $('input:hidden[name="__RequestVerificationToken"]').val());
+            },
+        });
+    });
+
+    function resetMenus() {
+        $("#displayquick").load($("#DefaultQuick").val());
+        $('#RightSlidingWindow').removeAttr('class');
+        $('#RightSlidingWindow').attr('class', 'ui-theme-settings');
+        $("#mnuprojectmaster").removeClass("mm-active");
+        $("#mnuAddProject").removeClass("mm-active");
+
+        $("#mnuaccountmaster").removeClass("mm-active");
+        $("#mnuusermaster").removeClass("mm-active");
+        $("#mnucvvalue").removeClass("mm-active");
+        $("#mnucurrencies").removeClass("mm-active");
+        $("#mnuproducts").removeClass("mm-active");
+        $("#mnuCRMQuote").removeClass("mm-active");
+        $("#mnuQuoteManager").removeClass("mm-active");
+        $("#mnuQuoteList").removeClass("mm-active");
+
+
+
+
+
+
+        $("#mnuallprojects").removeClass("mm-active");
+
+        $("#firstcli").removeClass("mm-active");
+        $("#fouthcli").removeClass("mm-active");
+        $("#fifthcli").removeClass("mm-active");
+        $("#thirdli").removeClass("mm-active");
+        $("#secondcli").removeClass("mm-active");
+        $("#sixthcli").removeClass("mm-active");
+        $("#seventhcli").removeClass("mm-active");
+        $("#eighthcli").removeClass("mm-active");
+        $("#ninecli").removeClass("mm-active");
+        $("#tencli").removeClass("mm-active");
+        $("#eleventhcli").removeClass("mm-active");
+        
+
+
+
+
+        $("#mnuaccountmaster").removeClass("mm-active");
+        $("#mnuusermaster").removeClass("mm-active");
+        $("#mnucvvalue").removeClass("mm-active");
+        $("#mnucurrencies").removeClass("mm-active");
+        $("#mnuproducts").removeClass("mm-active");
+        $("#mnucontactmaster").removeClass("mm-active");
+        $("#mnuprojectInbox").removeClass("mm-active");
+        $("#mnuProjectMaster").removeClass("mm-active");
+        $("#mnuAddProject").removeClass("mm-active");
+        $("#mnuTimelineView").removeClass("mm-active");
+        $("#mnuCompanyView").removeClass("mm-active");
+        $("#mnuHelpDocument").removeClass("mm-active");
+        $("#mnuprojectreport").removeClass("mm-active");
+    }
+
+    $('#mnuProjectMaster').on("click", function () {
+      
+        $("#myPartialViewContainer").load($("#ProjectList").val() + "?mode=detail&ctrlid=ProjectId&src=project");
+        $("#displayquick").load($("#DefaultQuick").val());
+        resetMenus();
+        $('#RightSlidingWindow').attr('class', 'ui-theme-settings');
+        $("#mnuProjectMaster").addClass("mm-active");
+        $("#fifthcli").addClass("mm-active");
+    });
+
+
+    $('#mnuAddProject').on("click", function () {
+        $("#myPartialViewContainer").load($("#NewProject").val() + "?mode=detail&ctrlid=ProjectId&src=project");
+        $("#displayquick").load($("#DefaultQuick").val());
+        resetMenus();
+        $('#RightSlidingWindow').attr('class', 'ui-theme-settings');
+        $("#mnuAddProject").addClass("mm-active");
+        $("#fouthcli").addClass("mm-active");
+    });
+
+
+    $('#mnuusermaster').on("click", function () {
+        $("#myPartialViewContainer").load($("#AUEUMSRegisterAll").val() + "?mode=detail&ctrlid=ctrlId");
+        $("#displayquick").load($("#DefaultQuick").val());
+        resetMenus();
+        $('#RightSlidingWindow').attr('class', 'ui-theme-settings');
+        $("#mnuusermaster").addClass("mm-active");
+        $("#thirdli").addClass("mm-active");
+    });
+
+    $('#mnucvvalue').on("click", function () {
+
+        var xYearNum = '2022';
+        var xMonthNum = '1';
+
+        $("#myPartialViewContainer").load($("#CVValuesAll").val() + "?mode=detail&ctrlid=ctrlId&yearNum=2022&monthNum=1");
+        $("#displayquick").load($("#DefaultQuick").val());
+        resetMenus();
+        $('#RightSlidingWindow').attr('class', 'ui-theme-settings');
+        $("#mnucvvalue").addClass("mm-active");
+        $("#fifthcli").addClass("mm-active");
+    });
+    $('#mnucurrencies').on("click", function () {
+        $("#myPartialViewContainer").load($("#CurrencyAll").val() + "?mode=detail&ctrlid=ctrlId");
+        $("#displayquick").load($("#DefaultQuick").val());
+        resetMenus();
+        $('#RightSlidingWindow').attr('class', 'ui-theme-settings');
+        $("#mnucurrencies").addClass("mm-active");
+        $("#sixthcli").addClass("mm-active");
+    });
+
+
+    $('#mnuproducts').on("click", function () {
+        $("#myPartialViewContainer").load($("#ProductAll").val() + "?mode=detail&ctrlid=ctrlId");
+        $("#displayquick").load($("#DefaultQuick").val());
+        resetMenus();
+        $('#RightSlidingWindow').attr('class', 'ui-theme-settings');
+        $("#mnuproducts").addClass("mm-active");
+        $("#eighthcli").addClass("mm-active");
+    });
+
+    $('#mnuCRMQuote').on("click", function () {
+        $("#myPartialViewContainer").load($("#NewCRMQuote").val() + "?mode=detail&ctrlid=QuoteId&src=Quotes");
+        $("#displayquick").load($("#DefaultQuick").val());
+        resetMenus();
+        $('#RightSlidingWindow').attr('class', 'ui-theme-settings');
+        $("#mnuCRMQuote").addClass("mm-active");
+        $("#ninecli").addClass("mm-active");
+    });
+
+    $('#mnuQuoteManager').on("click", function () {
+        $("#myPartialViewContainer").load($("#QuoteManager").val() + "?mode=detail&ctrlid=QuoteId&src=QuoteManager");
+        $("#displayquick").load($("#DefaultQuick").val());
+        resetMenus();
+        $('#RightSlidingWindow').attr('class', 'ui-theme-settings');
+        $("#mnuQuoteManager").addClass("mm-active");
+        $("#tencli").addClass("mm-active");
+    });
+
+    $('#mnuQuoteList').on("click", function () {
+        $("#myPartialViewContainer").load($("#QuoteList").val() + "?MenuID=1&size=0");
+        resetMenus();
+        $("#mnuQuoteList").addClass("mm-active");
+        $("#eleventhcli").addClass("mm-active");
+    });
+
+
+
+
+</script>

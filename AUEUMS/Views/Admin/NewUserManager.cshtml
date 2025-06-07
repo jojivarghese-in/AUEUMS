@@ -1,0 +1,311 @@
+﻿@model AUEUMS.View_Models.AUEUMSRegisterViewModel
+@{
+    @Html.Hidden("AddAUEUMSRegister", Url.Action("AddAUEUMSRegister", "Admin"))
+    @Html.Hidden("UpdateAUEUMSRegister", Url.Action("UpdateAUEUMSRegister", "Admin"))
+    @Html.Hidden("RefreshAUEUMSRegister", Url.Action("RefreshAUEUMSRegister", "Admin"))
+    @Html.Hidden("UserManagerList", Url.Action("AUEUMSRegisterAll", "Admin"))
+    @Html.Hidden("AUEUMSRegisterIdQuick", Model.Id)
+    @Html.Hidden("modeAUEUMSRegisterQuick", Model.mode)
+    @Html.Hidden("modifiedDate", Model.ModifiedDate)
+    @Html.AntiForgeryToken()
+}
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+@addTagHelper *, AuthoringTagHelpers
+
+<div class="col-md-12">
+    <div class="main-card mb-12 card">
+        <div class="card-body" style="padding-bottom:20px;padding-top:20px;">
+            <h5 class="card-title"><label id="prjTitle">@Model.title</label></h5>
+            <form id="formid" class="needs-validation" novalidate>
+                <div class="form-row">
+                    <div class="col-md-4 mb-3 position-relative form-group">
+                        <label for="ProjectName" class="">First Name</label>
+                        <input asp-for="FirstName" name="txtFirstName" id="txtFirstName" placeholder="" type="text" class="form-control" required maxlength="150">
+
+                    </div>
+                    <div class="col-md-4 mb-3 position-relative form-group">
+                        <label for="lblLastName" class="">Last Name</label>
+                        <input asp-for="LastName" name="txtLastName" id="txtLastName" placeholder="" type="text" class="form-control" required maxlength="150">
+                    </div>
+                    <div class="col-md-4 mb-3 position-relative form-group">
+                        <label for="lblCompany" class="">ID No</label>
+                        <input asp-for="SecretKey" name="txtSecretKey" id="txtSecretKey" placeholder="" type="text" class="form-control" required maxlength="100">
+
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="col-md-6 mb-3 position-relative form-group">
+                        <label for="lblCollege" class="">College</label>
+                        <select asp-for="collegeID" name="collegeList" id="collegeList" class="form-control"
+                                asp-items="@(new SelectList(Model.collegeList, "Id", "CollegeName",Model.collegeID))" required>
+                            <option value="">Select</option>
+                        </select>
+ 
+                    </div>
+            @*         <div class="col-md-4 mb-3 position-relative form-group">
+                        <label for="lblPrograms" class="">Program Major</label>
+                        <select asp-for="programMajorID" name="programMajorList" id="programMajorList" class="form-control"
+                                asp-items="@(new SelectList(Model.programMajorList, "Id", "ProgramMajorName",Model.programMajorID))">
+                            <option value="">Select</option>
+                        </select>
+                    </div> *@
+                    <div class="col-md-6 mb-3 position-relative form-group">
+                        <label for="lblRoleListID" class="">User Role</label>
+                        <select asp-for="RoleListID" name="usrRolelist" id="usrRolelist" class="form-control"
+                                asp-items="@(new SelectList(Model.rolelist, "Id", "RoleName",Model.RoleListID))" required>
+                            <option value="">Select</option>
+                        </select>
+
+                    </div>
+
+                </div>
+                <div class="form-row">
+                    <div class="col-md-6 mb-3 position-relative form-group">
+                        <label for="lblAddress" class="">Address</label>
+                        <textarea asp-for="Address" name="txtAddress" id="txtAddress" class="form-control" maxlength="500"></textarea>
+
+                    </div>
+                    <div class="col-md-6 mb-3 position-relative form-group">
+                       
+                    </div>
+                </div>
+                <div class="form-row">
+                    
+                    <div class="col-md-3 mb-3 position-relative form-group">
+                        <label for="lblCity" class="">City</label>
+                        <input asp-for="City" name="txtCity" id="txtCity" placeholder="" type="text" class="form-control" required maxlength="150">
+
+                    </div>
+                    <div class="col-md-6 mb-3 position-relative form-group">
+                        <label for="lblTelephone" class="">Telephone</label>
+                        <input asp-for="Phone" name="txtTelephone" id="txtTelephone" placeholder="" type="text" class="form-control" maxlength="15" oninput="this.value=this.value.replace(/[^0-9]/g,'');">
+                       
+                    </div>
+                    <div class="col-md-3 mb-3 position-relative form-group">
+                        <label for="lblPostalCode" class="">Postal Code</label>
+                        <input asp-for="PostalCode" name="txtPostalCode" id="txtPostalCode" placeholder="" type="text" class="form-control" maxlength="15" oninput="this.value=this.value.replace(/[^0-9]/g,'');">
+
+                    </div>
+
+                </div>
+
+                <div class="form-row">
+                    <div class="col-md-6 mb-3 position-relative form-group">
+                        <label for="lblEmail" class="">Email</label>
+                        <input asp-for="Email" name="txtEmail" id="txtEmail" placeholder="" type="email" class="form-control" required maxlength="150">
+
+                    </div>
+                    <div class="col-md-6 mb-3 position-relative form-group">
+                        <label for="lblPassword" class="">Password</label>
+                        <input name="txtPassword" id="txtPassword" placeholder="" type="password" class="form-control" maxlength="50">
+                        <input asp-for="Password" name="hPassword" id="hPassword" type="hidden">
+                    </div>
+                </div>
+
+
+                    <div class="position-relative form-group">
+                        <button class="mt-1 btn btn-primary" id="tbnSubmitProject" type="submit">Submit</button>
+
+                        <button class="mt-1 btn btn-light" type="button" id="tbnCancelSideBar">Cancel</button>
+
+                    </div>
+</form>
+        </div>
+    </div>
+</div>
+
+<script>
+
+    $(document).ready(function () {
+        $('#tbnCancelSideBar').on("click", function () {
+            $('#RightSlidingWindow').removeAttr('class');
+            $('#RightSlidingWindow').attr('class', 'ui-theme-settings');
+        });
+    });
+    var forms = document.getElementsByClassName('needs-validation');   
+    
+    var validation = Array.prototype.filter.call(forms, function (form) {
+        form.addEventListener('submit', function (event) {
+
+            if (form.checkValidity() === false) {
+                event.preventDefault();
+                event.stopPropagation();
+                //alert('Add Mandatory Fields');
+                showToolTip('Add Mandatory Fields')
+                form.classList.add('was-validated');
+            }
+            else {      
+
+
+                if ($("#txtPassword").val() != "") {
+
+                    if ($("#txtPassword").val().length < 8) {
+
+                        showToolTip('Please Enter Password with atleast 8 Characters');
+                        event.preventDefault();
+                        event.stopPropagation();
+                        return;
+                    }
+                    else {
+
+                        var _pd = $("#txtPassword").val();
+                        $("#hPassword").val(_pd);
+                    }
+                }
+
+                var AUEUMSRegisterViewModel = {
+                    "Id": parseInt($("#AUEUMSRegisterIdQuick").val()),
+                    "FirstName": $("#txtFirstName").val(),
+                    "LastName": $("#txtLastName").val(),
+                    "SecretKey":$("#txtSecretKey").val(),
+                    "PostalCode": $("#txtPostalCode").val(),
+                    "collegeID":parseInt($("#collegeList").val()),                    
+                    "AUEUMSUserType":parseInt($("#usrRolelist").val()),
+                    "Phone": $("#txtTelephone").val(),
+                    "Address": $("#txtAddress").val(),
+                    "City": $("#txtCity").val(),                    
+                    "Email": $("#txtEmail").val(),
+                    "Password": $("#hPassword").val(),
+                    "mode": $("#mode").val()
+                    
+                 
+                };
+
+
+                var urlToCall = $("#AddAUEUMSRegister").val();
+                if (parseInt($("#AUEUMSRegisterIdQuick").val()) != "-1")
+                    urlToCall = $("#UpdateAUEUMSRegister").val();
+
+                $.ajax({
+                    url: urlToCall,
+                    type: "Post",
+                    dataType: "json",
+                    contentType: "application/json; charset=utf-8",
+                    headers: {
+                        RequestVerificationToken:
+                            $('input:hidden[name="__RequestVerificationToken"]').val()
+                    },
+                    data: JSON.stringify(AUEUMSRegisterViewModel),
+                    cache: false,
+                    async: false,
+                    success: function (result) {
+                        var resultdata = JSON.parse(result);
+                        if (resultdata.Usermessage == 1) {
+                            form.classList.add('was-validated');
+                            showToolTip('User List Saved Successfully')
+                            $("#formid").removeAttr('class', 'was-validated');
+
+
+                            // $("#contactContainer").load($("#RefreshContact").val() + "?ContactId=-1&AccountId=" + $('#AccountId').val());
+
+
+                            $("#AUEUMSRegisterIdQuick").val(-1);
+                            if ($("#modeAUEUMSRegisterQuick").val() == "quick") {
+                                $("#displayquick").load($("#UserManagerList").val() + "?mode=detail&ctrlid=Id");
+                                // $("#clientContainer").load($("#RefreshAUEUMSRegister").val() + "?MachineID=" + resultdata.MachineViewModal.MachineID);
+                                event.preventDefault();
+                                event.stopPropagation();
+                                $('#RightSlidingWindow').removeAttr('class');
+                                $('#RightSlidingWindow').attr('class', 'ui-theme-settings');
+
+
+
+                            }
+                            else if ($("#modeAUEUMSRegisterQuick").val() == "detail") {
+                                $("#myPartialViewContainer").load($("#UserManagerList").val() + "?mode=detail&ctrlid=Id");
+                                event.preventDefault();
+                                event.stopPropagation();
+                                $('#RightSlidingWindow').removeAttr('class');
+                                $('#RightSlidingWindow').attr('class', 'ui-theme-settings');
+                            }
+                            else {
+                                $("#myPartialViewContainer").load($("#UserManagerList").val() + "?mode=detail&ctrlid=Id");
+                                event.preventDefault();
+                                event.stopPropagation();
+                                $('#RightSlidingWindow').removeAttr('class');
+                                $('#RightSlidingWindow').attr('class', 'ui-theme-settings');
+                            }
+
+                            //$("#MachineDetails").load($("#RefreshAUEUMSRegister").val() + "?MachineID=" + resultdata.MachineViewModal.MachineID);
+                            //event.preventDefault();
+                            //event.stopPropagation();
+                            //$('#RightSlidingWindow').removeAttr('class');
+                            //$('#RightSlidingWindow').attr('class', 'ui-theme-settings');
+
+
+
+                        }
+                        else if (resultdata.Usermessage == -1) {
+                            form.classList.add('was-validated');
+                            $("#formid").removeAttr('class', 'was-validated');
+                            showToolTip('Validation Failed');
+                            if ($("#modeAUEUMSRegisterQuick").val() == "quick")
+                                $("#displayquick").load($("#UserManagerList").val());
+                            else if ($("#modeContactQuick").val() == "detail") {
+                                $("#myPartialViewContainer").load($("#UserManagerList").val() + "?mode=detail&ctrlid=Id");
+                            }
+                            else
+                                $("#myPartialViewContainer").load($("#UserManagerList").val());
+                            event.preventDefault();
+                            event.stopPropagation();
+                        }
+                        else if (resultdata.Usermessage == -2) {
+                            form.classList.add('was-validated');
+                            $("#formid").removeAttr('class', 'was-validated');
+                            showToolTip('User - Error Occured in DataCore');
+                            event.preventDefault();
+                            event.stopPropagation();
+                        }
+                        else if (resultdata.Usermessage == -3) {
+                            form.classList.add('was-validated');
+                            $("#formid").removeAttr('class', 'was-validated');
+                            showToolTip('User - Error Occured in DataCore');
+                            event.preventDefault();
+                            event.stopPropagation();
+                        }
+                        else if (resultdata.Usermessage == -5) {
+                            form.classList.add('was-validated');
+                            $("#formid").removeAttr('class', 'was-validated');
+                            showToolTip(resultdata.SystemExceptionMessage);
+                            event.preventDefault();
+                            event.stopPropagation();
+                        }
+                        else if (resultdata.Usermessage == -8) {
+                            form.classList.add('was-validated');
+                            $("#formid").removeAttr('class', 'was-validated');
+                            showToolTip('Wrong Data Entry');
+                            event.preventDefault();
+                            event.stopPropagation();
+                        }
+                        else if (resultdata.Usermessage == -9) {
+                            form.classList.add('was-validated');
+                            $("#formid").removeAttr('class', 'was-validated');
+                            showToolTip('Same User already exists');
+                            event.preventDefault();
+                            event.stopPropagation();
+                        }
+
+
+
+
+                        else {
+                            form.classList.add('was-validated');
+                            $("#formid").removeAttr('class', 'was-validated');
+                            showToolTip('User - API call from app to datacore failed');
+                            event.preventDefault();
+                            event.stopPropagation();
+                        }
+                    },
+                    fail: function (result) {
+                        form.classList.add('was-validated');
+                        $("#formid").removeAttr('class', 'was-validated');
+                        showToolTip('User - API call from Client Side failed');
+                        event.preventDefault();
+                        event.stopPropagation();
+                    }
+                });
+            }
+        })
+    });
+</script>

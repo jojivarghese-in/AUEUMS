@@ -1,0 +1,247 @@
+﻿@model AUEUMS.View_Models.AssignmentsForStudentsListViewModel
+
+
+@Html.Hidden("GetAssignmentsEdit", Url.Action("GetAssignmentsEdit", "Faculty"))
+@Html.Hidden("UploadAssignmentByStudent", Url.Action("UploadAssignmentByStudent", "Student"))
+@Html.Hidden("ViewAssignmentByStudent", Url.Action("ViewAssignmentByStudent", "Student"))
+
+
+@Html.Hidden("AssignmentsListmode", Model.mode)
+
+
+@Html.AntiForgeryToken()
+
+<div class="app-main__inner">
+    <div class="app-page-title">
+        <div class="page-title-wrapper">
+            <div class="page-title-heading">
+                <div class="page-title-icon">
+                    <i class="pe-7s-hourglass icon-gradient bg-ripe-malin">
+                    </i>
+                </div>
+                <div>
+                    <label id="headernameClie">Student Assignments List</label>
+                    <div class="page-title-subheading">
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="main-card mb-3 card" style="width:100%">
+        <div class="card-body">
+            <div class="btn-group">
+           
+            </div>
+
+            <div id="divAssignmentsdetails" class="table-responsive">
+                <table class="table table-bordered table-striped table-condensed display" id="StudentAssignmentDetails">
+                    <thead>
+                        <tr>
+                           
+                            <th style="width: 150px;">AssignmentTitle</th>
+                            <th style="width: 100px;">Download</th>
+                            <th style="width: 60px;">Due Date</th>
+                            <th style="width:60px;">Posted Date</th>
+                            <th style="width:100px;">Student Uploads</th>
+                            <th style="width:80px;">Action</th>
+                           
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model.assignmentsForStudents)
+                        {
+                        <tr>
+                           
+                            <td>@item.mAssignmentTitle</td>
+                                @if (@item.mAssignmentsFileName != "" && @item.mAssignmentsFileName != null)
+                            {
+                                    <td><a href="~/uploads/@item.mAssignmentsFileName" target="_blank">Assignment</a></td>
+                            }
+                            else
+                            {
+                                <td></td>
+                            }
+                         
+                            <td>@item.displaymDueDateTime</td>
+                            <td>@item.displaymPostedDateTime</td>
+
+                                @if (@item.mAssignmentsSubmitFileName != "" && @item.mAssignmentsSubmitFileName !=null)
+                                {
+                                    <td><a href="~/uploads/@item.mAssignmentsSubmitFileName" target="_blank">Answer Sheet</a></td>
+                                }
+                                else
+                                {
+                                    <td></td>
+                                }
+
+                           
+                           
+                                @if(@item.displayDateExpiry==0)
+                                {
+                                <td>
+                                    <div class="tooltipSlideLeft">
+                                    <a data="testpara=2&assignmentId=@item.mAssignmentId&studentId=@item.mStudentUsrId" data-toggle="modal" type="button" class="btngrid btnUploadByStudent" style="cursor: pointer;padding-right: 18px;">
+                                            <i class="pe-7s-cloud-upload" style="color:#e83e8c;font-size:medium;font-weight:bold;"></i>
+                                     </a>
+                                    <span class="tooltiptextSlideLeft">
+                                        Upload
+                                    </span>
+
+                                   </div>
+                                    <div class="tooltipSlideLeft">
+                                        <a data="testpara=2&assignmentId=@item.mAssignmentId&studentId=@item.mStudentUsrId" data-toggle="modal" type="button" class="btngrid btnSelectAssignment" style="cursor: pointer;padding-right: 18px;">
+                                            <i class="pe-7s-note" style="color:maroon;font-size:medium;font-weight:bold;"></i>
+                                        </a>
+                                        <span class="tooltiptextSlideLeft">
+                                            View
+                                        </span>
+
+                                    </div>
+                                </td>
+                                }
+                                else
+                                {
+                                <td> <b style="color:brown;font-size:small">Expired</b>
+
+                                <div class="tooltipSlideLeft">
+                                    <a data="testpara=2&assignmentId=@item.mAssignmentId&studentId=@item.mStudentUsrId" data-toggle="modal" type="button" class="btngrid btnSelectAssignment" style="cursor: pointer;padding-right: 18px;">
+                                        <i class="pe-7s-note" style="color:maroon;font-size:medium;font-weight:bold;"></i>
+                                    </a>
+                                    <span class="tooltiptextSlideLeft">
+                                        View
+                                    </span>
+
+                                </div>
+                                
+                                
+                                </td>
+                                }
+                               
+                        </tr>
+
+                        }
+                    </tbody>
+                </table>
+            </div>
+           
+            <div class="position-relative form-group" hidden>
+                <button class="mb-2 mr-2 btn btn-light" type="button" id="tbnCancelSideBar">Cancel</button>
+            </div>
+           
+        </div>
+    </div>
+
+</div>
+
+<script>
+    $(document).ready(function () {
+        $.ajaxSetup({
+            beforeSend: function (xhr) {
+                xhr.setRequestHeader("RequestVerificationToken",
+                    $('input:hidden[name="__RequestVerificationToken"]').val());
+            },
+        });
+
+        $('#tbnCancelSideBar').on("click", function () {
+            $('#RightSlidingWindow').removeAttr('class');
+            $('#RightSlidingWindow').attr('class', 'ui-theme-settings');
+        });
+
+        $('#StudentAssignmentDetails').DataTable({
+            dom: "Bfrtip",
+            buttons: [
+            ]
+        });
+     
+        
+        $('#btnNewAssignments').on("click", function () {
+            var mode = $("#AssignmentsListmode").val();
+            $("#displayquick").load($("#NewAssignments").val() + "?mode=" + mode + "&AssignmentsId=-1");
+            $('#RightSlidingWindow').attr('class', 'ui-theme-settings settings-open');
+            event.preventDefault();
+            event.stopPropagation();
+        });
+
+
+        var EditAssignmentObj;
+        var uriEditClientObj;
+        $('#StudentAssignmentDetails tbody').on('click', '.btnSelectAssignment', function () {
+
+            EditAssignmentObj = $(this);
+            uriEditClientObj = EditAssignmentObj[0].attributes['1'].textContent;
+            uriEditClientObj = $(this).attr('data');
+            var assignmentId = getUrlParameter("assignmentId", uriEditClientObj);
+            var studentId = getUrlParameter("studentId", uriEditClientObj);
+
+            $("#displayquick").load($("#ViewAssignmentByStudent").val() + "?mode=detail&AssignmentId=" + assignmentId+ "&StudentId=" + studentId);
+            $('#RightSlidingWindow').attr('class', 'ui-theme-settings settings-open');
+
+            event.preventDefault();
+            event.stopPropagation();
+       
+
+        });
+
+
+
+
+        var UploadAssignmentObj;
+        var uriUploadClientsObj;
+        $('#StudentAssignmentDetails tbody').on('click', '.btnUploadByStudent', function () {
+            
+                      
+            UploadAssignmentObj = $(this);  //for future use
+            uriUploadClientsObj = UploadAssignmentObj[0].attributes['1'].textContent;
+            uriUploadClientsObj = $(this).attr('data');
+            var assignmentId = getUrlParameter("assignmentId", uriUploadClientsObj); 
+            var studentId = getUrlParameter("studentId", uriUploadClientsObj);
+
+            $("#displayquick").load($("#UploadAssignmentByStudent").val() + "?mode=detail&AssignmentId=" + assignmentId+ "&StudentId=" + studentId);
+            $('#RightSlidingWindow').attr('class', 'ui-theme-settings settings-open');
+            event.preventDefault();
+            event.stopPropagation();
+
+
+        });
+
+
+    });
+
+    function getUrlParameter(name, uri) {
+        name = name.replace(/[\[]/, '\\[').replace(/[\]]/, '\\]');
+        var regex = new RegExp('[\\?&]' + name + '=([^&#]*)');
+        var results = regex.exec(uri);
+        return results === null ? '' : decodeURIComponent(results[1].replace(/\+/g, ' '));
+    }
+
+
+
+</script>
+<style>
+    .tooltipSlideLeft {
+        position: relative;
+        display: inline-block;
+    }
+
+        .tooltipSlideLeft .tooltiptextSlideLeft {
+            visibility: hidden;
+            width: 80px;
+            background-color: #6495ed;
+            border: 2px #fff solid;
+            color: #fff;
+            text-align: center;
+            border-radius: 6px;
+            padding: 5px 0;
+            /* Position the tooltip */
+            position: absolute;
+            z-index: 1;
+            top: -40px;
+            left: 3%;
+        }
+
+        .tooltipSlideLeft:hover .tooltiptextSlideLeft {
+            visibility: visible;
+        }
+
+</style>

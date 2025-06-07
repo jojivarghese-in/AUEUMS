@@ -1,0 +1,224 @@
+﻿@model AUEUMS.View_Models.TimetableDetailListViewModel
+
+@Html.Hidden("GetTimetableDetailsListJSON", Url.Action("getTimetableDetailsByHdrIdJSON", "Admin"))
+@Html.AntiForgeryToken()
+
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+@addTagHelper *, AuthoringTagHelpers
+@{
+    var usrRoles = User.Claims.FirstOrDefault(x => x.Type == System.Security.Claims.ClaimTypes.Role).Value;
+}
+<style type="text/css">
+
+    .red-input:focus {
+        color: red;
+    }
+
+    .blue-input {
+        color: Highlight;
+    }
+
+    .brown-input {
+        color: saddlebrown;
+    }
+</style>
+
+
+<div id="divTimetableDetails" class="table-responsive">
+
+    <table id="TimetableDetailsItems" class="table table-bordered table-striped table-condensed display" width="100%">
+        <thead>
+            <tr>
+                <th width="20px"></th>
+                <th width="80px">SemesterType</th>
+                <th width="80px">SemesterYear</th>
+                <th width="80px">RoomNo</th>
+                <th width="100px">CourseName</th>
+                <th width="100px">ClassName</th>
+                <th width="80px">TimeSlot</th>
+                <th width="80px">DayName</th>
+
+                <th width="60px">Action</th>
+            </tr>
+        </thead>
+
+    </table>
+</div>
+
+<script>
+
+    var $ = $.noConflict();
+    $(document).ready(function () {
+
+      $.ajaxSetup({
+            beforeSend: function (xhr) {
+                xhr.setRequestHeader("RequestVerificationToken",
+                    $('input:hidden[name="__RequestVerificationToken"]').val());
+            },
+        });
+
+        var groupColumn = 1;
+       
+      
+        var grp="CourseName";
+
+        var table = $("#TimetableDetailsItems").DataTable({
+            "ajax": {
+                "url": "/Admin/getReportTimetableGroupbyJSONAsync",
+                "dataSrc": "",
+                "data": {'grpColumn': grp },
+                "type": 'GET',
+            },
+            "columns": [
+                { "defaultContent": "" },
+                { "data": "SemesterType"},
+                { "data": "SemesterYear"},
+                { "data": "RoomNo" },
+                { "data": "CourseName" },
+                { "data": "CourseCode" },
+                { "data": "ClassName" },
+                { "data": "TimeSlot" },
+                { "data": "DayName" },
+          
+                {
+                    "render": function (data, type, row, meta) {
+                       
+                            return '<div></div>';
+                   }
+                },
+            ],
+            "fnRowCallback": function (nRow, aData, iDisplayIndex) {
+                if (aData.isParentStyle == "details-control") {
+                    $('td:eq(0)', nRow).addClass("details-control");
+
+                }
+            },
+            "order": [[2, 'desc']],
+            "columnDefs": [{
+                "targets": [1],
+                "searchable": false
+            },
+            {
+                "targets": [0, 1],
+                "orderable": false
+            }
+            ],
+            "dom": '<"top"Bfl>iprt<"bottom">p<"clear">',
+            "stateSave": true,
+            "buttons": [
+                {
+
+                    "extend": 'excelHtml5',
+                    "className": 'btn btn-outline-secondary',
+                    "exportOptions": {
+                        "columns": [1, 2, 3, 4]
+                    }
+                }
+            ]
+        });
+
+
+        $('#TimetableDetailsItems tbody').on('click', 'td.details-control', function () {
+
+
+            var tr = $(this).closest('tr');
+            var row = table.row(tr);
+
+            if (row.child.isShown()) {
+                // This row is already open - close it
+                row.child.hide();
+                tr.removeClass('shown');
+            }
+            else {
+                loaddata(row.data(), function (formattedContent) {
+                    // Open this row
+                    row.child(formattedContent).show();
+                    tr.addClass('shown');
+
+                });
+            }
+        });
+
+
+
+    });
+
+    function loaddata(data1, callback) {
+
+
+        if (data1.HdrTimetableId == 0) { }
+        else {
+            var hdrId = data1.HdrTimetableId;
+          
+            $.ajax({
+                url: $("#GetTimetableDetailsListJSON").val(),
+                type: "Get",
+                dataType: "json",
+                contentType: "application/json; charset=utf-8",
+                headers: {
+                    RequestVerificationToken:
+                        $('input:hidden[name="__RequestVerificationToken"]').val()
+                },
+                data: {
+                    'estId': parseInt(hdrId),
+                    
+                },
+                //cache: false,
+                success: function (result) {
+
+                    var resultdata = JSON.parse(result);
+
+                    callback(format(resultdata));
+                },
+                fail: function (response) {
+
+                    alert("JSON Error, Unable to Open : API Error");
+                }
+
+            });
+        }
+    }
+    function format(EstDetailList) {
+
+      
+        var tablestr = '';
+
+            tablestr = '<div style="background:#ffffff;padding:10px;font-size:medium"><table class="mb-0 table display" style="width:97%;margin-left: 25px;">' +
+                '<thead><tr><td style="width:80px;color:cornflowerblue" hidden>TimeTableDetailId</td><td style="width:80px;color:cornflowerblue" hidden>HdrId</td><td style="width:100px;color:cornflowerblue">Course Code</td><td style="width:150px;color:cornflowerblue">Course Name</td><td style="width:100px;color:cornflowerblue">Class Name</td><td style="width:80px;color:cornflowerblue">Time Slot</td><td style="width:80px;color:cornflowerblue">Days</td></tr></thead ><tbody>';
+            $.each(EstDetailList, function (i, item) {
+
+                tablestr += '<tr><td hidden>item.TTDetailId</td >' +
+                    '<td hidden>' + item.TTHdrId + '</td><td>' + item.CourseCode + '</td><td>' + item.CourseName + '</td><td>' + item.ClassName + '</td><td>' + item.TimeSlot + '</td><td>' + item.DaysName + '</td></tr > ';
+            });
+            tablestr += '</tbody ></table><div>';
+       
+        
+
+
+        return tablestr;
+    }
+
+    function getUrlParameter(name, uri) {
+        name = name.replace(/[\[]/, '\\[').replace(/[\]]/, '\\]');
+        var regex = new RegExp('[\\?&]' + name + '=([^&#]*)');
+        var results = regex.exec(uri);
+        return results === null ? '' : decodeURIComponent(results[1].replace(/\+/g, ' '));
+    }
+</script>
+
+<style>
+    thead input {
+        width: 100%;
+    }
+
+    td.details-control {
+        background: url('../images/details_open.png') no-repeat center center;
+        cursor: pointer;
+    }
+
+    tr.shown td.details-control {
+        background: url('../images/details_close.png') no-repeat center center;
+    }
+</style>
+
+

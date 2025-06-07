@@ -1,0 +1,379 @@
+﻿@model AUEUMS.View_Models.TimetableHeaderListViewModel
+@Html.Hidden("NewTimetableHeader", Url.Action("NewTimetableHeader", "Admin"))
+@Html.Hidden("GetTimetableHdrEdit", Url.Action("GetTimetableHdrEdit", "Admin"))
+@Html.Hidden("NewTimetableDetails", Url.Action("NewTimetableDetails", "Admin"))
+@Html.Hidden("ViewTTDetailsListPartial", Url.Action("ViewTTDetailsListPartial", "Admin"))
+@Html.Hidden("ViewTTReportListPartial", Url.Action("ViewTTReportListPartial", "Admin"))
+@Html.Hidden("TimetableHeadermode", Model.mode)
+
+@Html.AntiForgeryToken()
+
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+@addTagHelper *, AuthoringTagHelpers
+<!doctype html>
+<html lang="en">
+
+<head> 
+    <style type="text/css">
+
+        .tooltipSlideLeft {
+            position: relative;
+            display: inline-block;
+        }
+
+            .tooltipSlideLeft .tooltiptextSlideLeft {
+                visibility: hidden;
+                width: 80px;
+                background-color: #6495ed;
+                border: 2px #fff solid;
+                color: #fff;
+                text-align: center;
+                border-radius: 6px;
+                padding: 5px 0;
+                /* Position the tooltip */
+                position: absolute;
+                z-index: 1;
+                top: -40px;
+                left: 3%;
+            }
+
+            .tooltipSlideLeft:hover .tooltiptextSlideLeft {
+                visibility: visible;
+            }
+    </style>
+</head>
+<body>
+<div class="app-main__inner">
+
+    <div class="main-card mb-3 card" style="margin-top: 5px;">
+            <div class="card-body" style="background-color: beige;">
+
+            <ul class="nav nav-tabs nav-justified bg-navy-active">
+                <li class="nav-item"><a data-toggle="tab" href="#tab-eg11-0" id="tittab-eg11-0" class="nav-link show active" style="color:#124356;font-weight:bold">Timetable </a></li>
+                <li class="nav-item"><a data-toggle="tab" href="#tab-eg11-1" id="tittab-eg11-1" class="nav-link show" style="color:#124356;font-weight:bold">Timetable Details</a></li>
+                <li class="nav-item"><a data-toggle="tab" href="#tab-eg11-2" id="tittab-eg11-2" class="nav-link show" style="color:#124356;font-weight:bold">Timetable Report</a></li>
+
+                </ul>
+            <div class="tab-content">
+                <div class="tab-pane show active overlay" id="tab-eg11-0" role="tabpanel">
+                    <form id="formid" class="needs-validation" novalidate>
+                        <div class="main-card mb-3 card" style="width:99%">
+                            <div class="card-body">
+                                <div id="overlay">
+                                    <div class="cv-spinner">
+                                        <span class="spinner"></span>
+                                    </div>
+                                </div>
+                           
+                                <div class="main-card mb-3 card" style="width:100%">
+                                    <div class="card-body">
+                                        <div class="btn-group">
+                                            <a id="btnNewTimetableHeader" href="#">
+                                               <i class="pe-7s-plus" style="color:#3f6ad8;font-weight:bold"></i>New
+                                            </a>
+                                        </div>
+
+                                        <div id="divTimetablehdr" class="table-responsive">
+                                            <table class="table table-bordered table-striped table-condensed display" id="StudentTimetableHdr">
+                                                <thead>
+                                                    <tr>
+                                                        
+                                                        <th style="width:100px;">Semster Type</th>
+                                                        <th style="width:50px;">Year</th>
+                                                        <th style="width:100px;">Room</th>
+                                                        <th style="width:50px;">Capacity</th>
+                                                        <th style="width:80px;">Date</th>
+                                                         <th style="width:100px;">Day</th>
+                                                        <th style="width:80px;">Action</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                   
+                                                        @foreach (var item in Model.timetableHeaders)
+                                                        {
+                                                            <tr>
+                                                                <td>@item.tblSemesterType.SemesterType</td>
+                                                                <td>@item.tblYear.SemesterYear</td>
+                                                                <td>@item.tblRoom.RoomNo</td>
+                                                                <td>@item.tblRoom.Capacity</td>
+                                                                <td>@item.displayTimetableDate</td>
+                                                                <td>@item.displayDayofWeek</td>
+                                                                <td>
+                                                                    <div class="tooltipSlideLeft">
+                                                                    <a data="testpara=2&thdrId=@item.Id" data-toggle="modal" type="button" class="btngrid btnTimetableHdr" style="cursor: pointer;padding-right: 18px;">
+                                                                        <i class="pe-7s-note" style="color:blueviolet;font-size:medium;font-weight:bold;"></i>
+                                                                    </a>
+                                                                        <span class="tooltiptextSlideLeft">
+                                                                            Edit Header
+                                                                        </span>
+                                                                    </div>
+                                                                    <div class="tooltipSlideLeft">
+                                                                    <a data="testpara=2&thdrId=@item.Id" data-toggle="modal" type="button" class="btngrid btnAddttDetails" style="cursor: pointer;padding-right: 10px;" >
+
+                                                                        <i class="pe-7s-keypad" style="color:crimson;font-size:medium;font-weight:bold;"></i>
+                                                                    </a>
+                                                                        <span class="tooltiptextSlideLeft">
+                                                                            New Details
+                                                                        </span>
+                                                                    </div>
+                                                                    <a data="testpara=2&thdrId=@item.Id" data-toggle="modal" type="button" class="btngrid btnTTDetails" style="cursor: pointer;padding-right: 10px;">
+                                                                        <div class="ml-auto badge badge-success">Schedule &gt;&gt; </div>
+                                                                    </a>
+
+                                                                </td>
+
+                                                            </tr>
+
+                                                        }
+                                                    
+                                                </tbody>
+                                            </table>
+                                        </div>
+
+                                        <div class="position-relative form-group" hidden>
+                                            <button class="mb-2 mr-2 btn btn-light" type="button" id="tbnCancelSideBar">Cancel</button>
+                                        </div>
+
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="tab-pane show" id="tab-eg11-1" role="tabpanel">
+                    <div class="main-card mb-3 card" style="width:99%">
+                        <div class="card-body">
+                            <div id="overlayQuoteItems">
+                                <div class="cv-spinnerQuoteItems">
+                                    <span class="spinnerQuoteItems"></span>
+                                </div>
+                            </div>
+                           
+                            <div id="TTDetailsPartialViewContainer" style="width:100%;margin:0px">
+                            </div>
+                                           
+
+                                         
+                           
+                    
+                        </div>
+              
+                    </div>
+
+
+                </div>
+                 <div class="tab-pane show" id="tab-eg11-2" role="tabpanel">
+                        <div class="main-card mb-3 card" style="width:99%">
+                            <div class="card-body">
+                                <div id="overlayQuoteItems">
+                                    <div class="cv-spinnerQuoteItems">
+                                        <span class="spinnerQuoteItems"></span>
+                                    </div>
+                                </div>
+
+                                <div id="TTReportPartialViewContainer" style="width:100%;margin:0px">
+                                </div>
+
+
+
+
+
+                            </div>
+
+                        </div>
+
+
+                    </div>
+            </div>
+
+        </div>
+    </div>
+
+
+
+</div>
+</body>
+</html>
+
+<script>
+    var $ = $.noConflict();
+    $(document).ready(function () {
+         $(".itemloader").hide();
+
+        $.ajaxSetup({
+            beforeSend: function (xhr) {
+                xhr.setRequestHeader("RequestVerificationToken",
+                    $('input:hidden[name="__RequestVerificationToken"]').val());
+            },
+        });
+
+        $('#tbnCancelSideBar').on("click", function () {
+            $('#RightSlidingWindow').removeAttr('class');
+            $('#RightSlidingWindow').attr('class', 'ui-theme-settings');
+        });
+
+        $('#StudentTimetable').DataTable({
+            dom: "Bfrtip",
+            buttons: [
+            ]
+        });
+         
+
+        $('#btnNewTimetableHeader').on("click", function () {
+            var mode = $("#TimetableHeadermode").val();
+            $("#displayquick").load($("#NewTimetableHeader").val() + "?mode=" + mode + "&TimeTableID=-1");
+            $('#RightSlidingWindow').attr('class', 'ui-theme-settings settings-open');
+            event.preventDefault();
+            event.stopPropagation();
+        });
+
+
+
+         var SelTimetableDtlObj;
+         var uriEditClientsObj;
+            $('#StudentTimetableHdr tbody').on('click', '.btnAddttDetails', function () {
+             
+             var mode = $("#TimetableHeadermode").val();
+              SelTimetableDtlObj = $(this);
+               uriEditClientsObj = SelTimetableDtlObj[0].attributes['1'].textContent;
+              uriEditClientsObj = $(this).attr('data');
+              var timetableHdrId = getUrlParameter("thdrId", uriEditClientsObj);
+             
+              $("#displayquick").load($("#NewTimetableDetails").val() + "?mode=" + mode + "&TimetableHdrId=" + timetableHdrId);
+             $('#RightSlidingWindow').attr('class', 'ui-theme-settings settings-open');
+
+         });
+
+
+          $("#tittab-eg11-0").on("click", function () {
+
+             $("#tittab-eg11-1").removeClass("active");
+              $("#tittab-eg11-1").removeClass("show");
+
+              $("#tittab-eg11-0").addClass("active");
+              $("#tittab-eg11-0").addClass("show");
+
+              $("#tab-eg11-1").removeClass("active");
+              $("#tab-eg11-1").removeClass("show");
+
+              $("#tab-eg11-0").addClass("active");
+              $("#tab-eg11-0").addClass("show");
+
+               $("#tittab-eg11-2").removeClass("active");
+               $("#tittab-eg11-2").removeClass("show");
+
+               $("#tab-eg11-2").removeClass("active");
+               $("#tab-eg11-2").removeClass("show");
+         });
+
+          $("#tittab-eg11-1").on("click", function () {
+
+                 $("#tittab-eg11-0").removeClass("active");
+                  $("#tittab-eg11-0").removeClass("show");
+
+                  $("#tittab-eg11-1").addClass("active");
+                  $("#tittab-eg11-1").addClass("show");
+
+                  $("#tab-eg11-0").removeClass("active");
+                  $("#tab-eg11-0").removeClass("show");
+
+                  $("#tab-eg11-1").addClass("active");
+                  $("#tab-eg11-1").addClass("show");
+
+                   $("#tittab-eg11-2").removeClass("active");
+                   $("#tittab-eg11-2").removeClass("show");
+
+                   $("#tab-eg11-2").removeClass("active");
+                   $("#tab-eg11-2").removeClass("show");
+          });
+
+            $("#tittab-eg11-2").on("click", function () {
+
+                 $("#tittab-eg11-0").removeClass("active");
+                   $("#tittab-eg11-0").removeClass("show");
+
+                    $("#tittab-eg11-1").removeClass("active");
+                    $("#tittab-eg11-1").removeClass("show");
+
+                   $("#tab-eg11-0").removeClass("active");
+                   $("#tab-eg11-0").removeClass("show");
+
+                    $("#tab-eg11-1").removeClass("active");
+                    $("#tab-eg11-1").removeClass("show");
+
+                    $("#tittab-eg11-2").addClass("active");
+                    $("#tittab-eg11-2").addClass("show");
+
+                    $("#tab-eg11-2").addClass("active");
+                    $("#tab-eg11-2").addClass("show");
+
+                    var mode = $("#TimetableHeadermode").val();
+
+                    $("#TTDetailsPartialViewContainer").load($("#ViewTTReportListPartial").val() + "?mode=" + mode);
+
+            });
+
+
+          var LoadTimetableDtlObj;
+           var uriLoadClientsObj;
+              $('#StudentTimetableHdr tbody').on('click', '.btnTTDetails', function () {
+
+
+                 $("#tittab-eg11-0").removeClass("active");
+                 $("#tittab-eg11-0").removeClass("show");
+
+                 $("#tittab-eg11-1").addClass("active");
+                 $("#tittab-eg11-1").addClass("show");
+
+                 $("#tab-eg11-0").removeClass("active");
+                 $("#tab-eg11-0").removeClass("show");
+
+                 $("#tab-eg11-1").addClass("active");
+                 $("#tab-eg11-1").addClass("show");
+
+                var mode = $("#TimetableHeadermode").val();
+                LoadTimetableDtlObj = $(this);
+                uriLoadClientsObj = LoadTimetableDtlObj[0].attributes['1'].textContent;
+                uriLoadClientsObj = $(this).attr('data');
+                var timetableHdrId = getUrlParameter("thdrId", uriLoadClientsObj);
+               // $("#displayquick").load($("#LoadTimetableDetails").val() + "?mode=" + mode + "&TimetableHdrId=" + timetableHdrId);
+                 $("#TTDetailsPartialViewContainer").load($("#ViewTTDetailsListPartial").val() + "?mode=" + mode + "&TimetableHdrId=" + timetableHdrId);
+
+          });
+
+
+        var EditTimetableHdrObj;
+        var uriEditClientsObj;
+          $('#StudentTimetableHdr tbody').on('click', '.btnTimetableHdr', function () {
+
+            var mode = $("#TimetableHeadermode").val();
+            EditTimetableHdrObj = $(this);
+            uriEditClientsObj = EditTimetableHdrObj[0].attributes['1'].textContent;
+            uriEditClientsObj = $(this).attr('data');
+            var timetableHdrId = getUrlParameter("thdrId", uriEditClientsObj);
+             
+            $("#displayquick").load($("#GetTimetableHdrEdit").val() + "?mode=" + mode + "&TimetableHdrId=" + timetableHdrId);
+            $('#RightSlidingWindow').attr('class', 'ui-theme-settings settings-open');
+      
+
+        });
+
+
+
+
+    });
+   function HideLabel(id) {
+    };
+    function getUrlParameter(name, uri) {
+        name = name.replace(/[\[]/, '\\[').replace(/[\]]/, '\\]');
+        var regex = new RegExp('[\\?&]' + name + '=([^&#]*)');
+        var results = regex.exec(uri);
+        return results === null ? '' : decodeURIComponent(results[1].replace(/\+/g, ' '));
+    }
+
+
+
+</script>
+
+

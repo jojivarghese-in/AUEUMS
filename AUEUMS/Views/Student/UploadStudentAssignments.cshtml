@@ -1,0 +1,71 @@
+﻿@model AUEUMS.View_Models.AssignmentsViewModel
+@{
+    
+    @Html.Hidden("AssignmentsIdQuick", Model.AsstId)
+    @Html.Hidden("AssignmentsIdQuick", Model.StudentAsstId)
+    @Html.Hidden("modeAssignmentsQuick", Model.mode)
+   
+    @Html.AntiForgeryToken()
+}
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+@addTagHelper *, AuthoringTagHelpers
+
+<div class="col-md-12">
+    <div class="main-card mb-12 card">
+        <div class="card-body" style="padding-bottom:20px;padding-top:20px;">
+            <h5 class="card-title"><label id="prjTitle">@Model.title</label></h5>
+            <form id="formid" class="needs-validation" class="needs-validation" asp-action="UploadStudentFile" enctype="multipart/form-data" method="post">
+               
+                <div class="form-row">
+                    <div class="col-md-12 mb-3 position-relative form-group">
+                    <label for="lblAssignmentTitle" class="">Assignment Title</label>
+                        <input asp-for="AssignmentTitle" name="txtAssignmentTitle" id="txtAssignmentTitle" placeholder="" type="text" class="form-control" required maxlength="150" readonly>
+
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="col-md-12 mb-3 position-relative form-group">
+                        <label for="lblAssignmentDesc" class="">Description</label>
+                        <textarea asp-for="AssignmentDescription" name="txtAssignmentDescription" id="txtAssignmentDescription" class="form-control" maxlength="500" rows="5" cols="5" readonly></textarea>
+
+                    </div>
+                </div>
+                <div class="form-row">
+
+                    <input type="file" asp-for="File" class="form-control" required id="flstudentupload"/>
+                    <input type="hidden" asp-for="AsstId" class="form-control" value="@Model.AsstId" />
+                    <input type="hidden" asp-for="StudentAsstId" class="form-control" value="@Model.StudentAsstId" />
+                </div>
+
+                <div class="position-relative form-group">
+                    <button class="mt-1 btn btn-primary" id="tbnSubmit">Submit</button>
+                    <button class="mt-1 btn btn-light" type="button" id="tbnCancelSideBar">Cancel</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<script>
+
+    $(document).ready(function () {
+        $.ajaxSetup({
+        beforeSend: function (xhr) {
+            xhr.setRequestHeader("RequestVerificationToken",
+                $('input:hidden[name="__RequestVerificationToken"]').val());
+        },
+        });
+
+        $('#tbnCancelSideBar').on("click", function () {
+            $('#RightSlidingWindow').removeAttr('class');
+            $('#RightSlidingWindow').attr('class', 'ui-theme-settings');
+        });
+
+        $('.Numberformat').number(true, 2);
+        $('.wholeNumberformat').number(true, 0);
+      
+    });
+
+
+   
+</script>

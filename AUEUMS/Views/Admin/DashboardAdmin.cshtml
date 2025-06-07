@@ -1,0 +1,78 @@
+﻿@model AUEUMS.View_Models.DashboardView
+@{
+    
+    @Html.Hidden("GetReportAUEUMSActiveUsers", Url.Action("GetReportAUEUMSActiveUsers", "Admin"))
+   
+    @Html.AntiForgeryToken()
+}
+<script src="~/scripts/chart.funnel.bundled.min.js"></script>
+<script src="~/scripts/Chart.min.js"></script>
+<script src="~/scripts/utils.js"></script>
+<div class="app-main__inner">
+    <div class="app-page-title">
+
+    </div>
+    @{ 
+        var usrRoles = User.Claims.FirstOrDefault(x => x.Type == System.Security.Claims.ClaimTypes.Role).Value;
+    }
+   
+    <div class="row">
+        <div class="col-md-6">
+            <div class="main-card mb-3 card">
+                <div class="card-header">
+                    Active Users
+                    <div class="btn-actions-pane-right">
+                        <div role="group" class="btn-group-sm btn-group">
+                            <button class="active btn btn-focus btn-gradient-focus " id="Usrlast5">Last 5</button>
+                            <button class="btn btn-focus btn-gradient-focus" id="Usrlast20">Last 20</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <div class="table-responsive">
+                       
+                     <div id="ContainerActiveUsers"></div>
+                       
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6">
+           
+        </div>
+    </div>
+        <input type="hidden" value = "intUser" id="userType">
+ 
+
+
+
+</div>
+<script>
+    $(document).ready(function () {
+
+        $.ajaxSetup({
+            beforeSend: function (xhr) {
+                xhr.setRequestHeader("RequestVerificationToken",
+                    $('input:hidden[name="__RequestVerificationToken"]').val());
+            },
+        });
+
+
+        $('.Numberformat').number(true, 2);
+        $('.wholeNumberformat').number(true, 0);
+
+        $("#ContainerActiveUsers").load($("#GetReportAUEUMSActiveUsers").val() + "?usrId=-1&number=5");
+
+        $('#Usrlast5').on('click', function () {
+            $("#ContainerActiveUsers").load($("#GetReportAUEUMSActiveUsers").val() + "?usrId=-1&number=5");
+        });
+        $('#Usrlast20').on('click', function () {
+            $("#ContainerActiveUsers").load($("#GetReportAUEUMSActiveUsers").val() + "?usrId=-1&number=20");
+        });
+
+       
+
+    });
+
+</script>
+

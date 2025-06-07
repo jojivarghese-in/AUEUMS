@@ -1,0 +1,42 @@
+﻿@model AUEUMS.View_Models.ReportView
+@{   
+    @Html.AntiForgeryToken()
+}
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+@addTagHelper *, AuthoringTagHelpers
+
+
+                    @foreach (var item in Model.reportViewModels)
+                    {
+                    <div class="vertical-timeline-item vertical-timeline-element">
+                        <div>
+                            <span class="vertical-timeline-element-icon bounce-in">
+                                <i class="@item.opTypeClass">sdasd</i>
+                            </span>
+                            <div class="vertical-timeline-element-content bounce-in">
+                                <h4 class="@item.opTypeHeaderClass">@item.opTypeHeader</h4>
+                                <p>@item.prj</p>
+                                <span class="vertical-timeline-element-date">@item.OpDateDisplay</span>
+                            </div>
+                        </div>
+                    </div>
+                    }
+         
+
+<script>
+    $(document).ready(function () {
+
+        $.ajaxSetup({
+            beforeSend: function (xhr) {
+                xhr.setRequestHeader("RequestVerificationToken",
+                    $('input:hidden[name="__RequestVerificationToken"]').val());
+            },
+        });
+
+        $('.Numberformat').number(true, 2);
+        $('.wholeNumberformat').number(true, 0);
+
+        
+    });
+  
+</script>

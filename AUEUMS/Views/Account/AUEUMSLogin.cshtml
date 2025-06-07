@@ -1,0 +1,115 @@
+﻿@model Login
+
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>AUE - American University In The Emirates</title>
+    <link href="~/css/main.87c0748b313a1dda75f5.css" rel="stylesheet">
+    <script type="text/javascript" src="~/scripts/main.87c0748b313a1dda75f5.js"></script>
+    <script src="https://code.jquery.com/jquery-3.3.1.js"></script>
+
+
+</head>
+
+<body>
+    <div class="app-container app-theme-white body-tabs-shadow">
+        <div class="app-container">
+            <div class="h-100">
+                <div class="h-100 no-gutters row">
+                    <div class="d-none d-lg-block col-lg-4">
+                        <div class="slider-light">
+                            <div class="slick-slider" id="slideshow">
+                                <div>
+                                    <div class="position-relative h-100 d-flex justify-content-center align-items-center bg-sunny-morning" tabindex="-1">
+                                        <div class="slide-img-bg" style="background-image: url('../assets/images/originals/DSC1.jpg');"></div>
+                                        <div class="slider-content" style="color:floralwhite;font-weight:bold">
+                                            <h3>American University in the Emirates</h3>
+                                            <p>Boasting a world-class campus and highly-acclaimed faculty, AUE is proud to welcome students from all around the world.</p>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div>
+                                    <div class="position-relative h-100 d-flex justify-content-center align-items-center bg-sunny-morning" tabindex="-1">
+                                        <div class="slide-img-bg" style="background-image: url('../assets/images/originals/city.jpg');"></div>
+                                   
+                                    </div>
+                                </div>
+                                <div>
+                                    <div class="position-relative h-100 d-flex justify-content-center align-items-center bg-sunny-morning" tabindex="-1">
+                                        <div class="slide-img-bg" style="background-image: url('../assets/images/originals/citynights.jpg');"></div>
+                                      
+                                    </div>
+                                </div>
+                                <div>
+                                    <div class="position-relative h-100 d-flex justify-content-center align-items-center bg-sunny-morning" tabindex="-1">
+                                        <div class="slide-img-bg" style="background-image: url('../assets/images/originals/buildings.jpg');"></div>
+                                     
+                                    </div>
+                                </div>
+                         
+
+
+                               
+                            </div>
+
+                        </div>
+                    </div>
+                    <div class="h-100 d-flex bg-white justify-content-center align-items-center col-lg-8">
+                        <div class="mx-auto app-login-box col-sm-12 col-lg-9">
+                             <div style="position:relative;">
+                                    <div class="app-logo" style="position:relative;" />
+                             </div>
+                                <h4>
+                                <span class="d-block">Welcome to <span style="color:#007bb6;font-weight:bold">AUE - Assessment Portal</span></span>
+                                    <span>Please sign in to your account.</span>
+                                </h4>
+                         
+                                <div class="widget-content-right">
+                                    <h5 class="card-title"><label id="prjTitle">Login</label></h5>
+                                    <form id="formid" class="needs-validation" asp-action="Login" method="post">
+                                        <div class="position-relative form-group mb-1">
+                                            <input asp-for="Email" placeholder="E-mail" type="email" class="form-control" required maxlength="100">
+                                        </div>
+                                        <div class="position-relative form-group mb-1">
+                                            <input asp-for="Password" placeholder="Password" type="password" class="form-control" required maxlength="50">
+                                        </div>
+
+                                        <div class="position-relative form-group mb-1">
+                                            <button class="mt-1 btn btn-gradient-info" id="tbnSubmit">Submit</button>
+
+                                            <button class="mt-1 btn btn-light" type="button" id="tbnCancelSideBar">Cancel</button>
+                                      
+                                            <input type="hidden" asp-for="ReturnUrl" />
+                                        </div>
+
+                                    </form>
+                                    <div class="position-relative form-group">
+                                      
+                                    </div>
+                                    <div class="position-relative form-group">
+                                       
+                                    </div>
+                                    <div class="form-row">
+                                        <div class="col-md-12">
+                                            <div class="position-relative form-group"><label style="color:red;font-weight:bold;">@Model.errormessage</label></div>
+                                        </div>
+                                    </div>
+
+
+                                </div>
+
+                            </div>
+                        </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+
+</html >

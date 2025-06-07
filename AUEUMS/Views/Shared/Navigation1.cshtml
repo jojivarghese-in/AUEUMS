@@ -1,0 +1,355 @@
+﻿@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+@addTagHelper *, AuthoringTagHelpers
+
+@{
+    @Html.Hidden("Logout", Url.Action("logOut", "Account"))
+    @Html.Hidden("TimetableList", Url.Action("TimetableList", "Admin"))
+    @Html.Hidden("AUEUMSRegisters", Url.Action("AUEUMSRegisters", "Admin"))
+    @Html.Hidden("AUEUMSRegisterAll", Url.Action("AUEUMSRegisterAll", "Admin"))
+    @Html.Hidden("RefreshAUEUMSRegister", Url.Action("RefreshAUEUMSRegister", "Admin"))
+    @Html.Hidden("Assignments", Url.Action("Assignments", "Faculty"))
+    @Html.Hidden("AssignmentsAll", Url.Action("AssignmentsAll", "Faculty"))
+    @Html.Hidden("StudentAssignments", Url.Action("StudentAssignments", "Student"))
+    @Html.Hidden("StudentAssignmentsAll", Url.Action("StudentAssignmentsAll", "Student"))
+    @Html.Hidden("StudentEvaluation", Url.Action("StudentEvaluation", "Faculty"))  
+    @Html.Hidden("DashboardFaculty", Url.Action("DashboardFacultyHome", "Admin"))
+    @Html.Hidden("DashboardStudent", Url.Action("DashboardStudentHome", "Admin"))
+    @Html.Hidden("DashboardAdmin", Url.Action("DashboardAdminHome", "Admin"))
+    @Html.Hidden("loadDashboard", Url.Action("LoadDashboard", "Admin"))   
+    @Html.Hidden("DefaultQuick", Url.Action("", "Admin"))
+
+    @Html.AntiForgeryToken()
+
+}
+<div class="app-header__content">
+
+    <div class="app-header-left">
+    </div>
+
+    <div class="app-header-right">
+        <div class="header-btn-lg pr-0">
+            <input id="CRMUserRoles" type="hidden" value="@User.Claims.FirstOrDefault(x => x.Type == System.Security.Claims.ClaimTypes.Role).Value" />
+            <ul class="header-megamenu nav">
+                <li class="nav-item">
+
+                    <a href="#" id="mnuDashboard1"  class="nav-link">
+                        <i class="nav-link-icon pe-7s-home"> </i>
+                        <span>
+                            Home
+                        </span>
+                    </a>
+                </li>
+
+                @{
+                    var usrRoles = User.Claims.FirstOrDefault(x => x.Type == System.Security.Claims.ClaimTypes.Role).Value;
+                }
+                @if (usrRoles == "Faculty")
+                {
+                   
+                    <li class="btn-group nav-item">
+                        <a class="nav-link" data-toggle="dropdown" aria-expanded="false" id="InternalFacultyMenu">
+                            Assignments
+                            <i class="fa fa-angle-down ml-2 opacity-5"></i>
+                        </a>
+                        <div tabindex="-1" role="menu" aria-hidden="true" class="rm-pointers dropdown-menu" id="tabInternalSales">
+                            <div class="dropdown-menu-header">
+                                <div class="dropdown-menu-header-inner bg-secondary">
+                                    <div class="menu-header-image opacity-5" style="background-image: url('assets/images/dropdown-header/city3.jpg');"></div>
+                                    <div class="menu-header-content">
+                                        <h6 class="menu-header-title">Assignments</h6>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="scroll-area-xs">
+                                <div class="scrollbar-container ps">
+                                    <button type="button" tabindex="1" class="dropdown-item" onclick="loadAssignmentsAll()">Assignments List</button>
+                                    <button type="button" tabindex="2" class="dropdown-item" onclick="loadStudentEvaluation()">Student Evaluation</button>
+                                    <button type="button" tabindex="3" class="dropdown-item">&nbsp;</button>
+                                    <button type="button" tabindex="4" class="dropdown-item">&nbsp;</button>
+                                    <div class="ps__rail-x" style="left: 0px; bottom: 0px;"><div class="ps__thumb-x" tabindex="0" style="left: 0px; width: 0px;"></div></div><div class="ps__rail-y" style="top: 0px; right: 0px;"><div class="ps__thumb-y" tabindex="0" style="top: 0px; height: 0px;"></div></div>
+                                </div>
+                            </div>
+                            <ul class="nav flex-column">
+                                <li class="nav-item-divider nav-item"></li>
+                                <li class="nav-item-btn nav-item">
+                                   
+                                </li>
+                            </ul>
+                        </div>
+                    </li>
+                }
+
+                @if (usrRoles == "Student")
+                {
+                   
+                    <li class="btn-group nav-item">
+                        <a class="nav-link" data-toggle="dropdown" aria-expanded="false" id="InternalStudentMenu">
+                            Assignments
+                            <i class="fa fa-angle-down ml-2 opacity-5"></i>
+                        </a>
+                        <div tabindex="-1" role="menu" aria-hidden="true" class="rm-pointers dropdown-menu" id="tabInternalSales">
+                            <div class="dropdown-menu-header">
+                                <div class="dropdown-menu-header-inner bg-secondary">
+                                    <div class="menu-header-image opacity-5" style="background-image: url('assets/images/dropdown-header/city3.jpg');"></div>
+                                    <div class="menu-header-content">
+                                        <h6 class="menu-header-title">Assignments</h6>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="scroll-area-xs">
+                                <div class="scrollbar-container ps">
+                                    <button type="button" tabindex="1" class="dropdown-item" onclick="loadAssignmentsPostedAll()">Assignments Posted</button>
+                                    <button type="button" tabindex="2" class="dropdown-item">&nbsp;</button>
+                                    <button type="button" tabindex="3" class="dropdown-item">&nbsp;</button>
+                                    <button type="button" tabindex="4" class="dropdown-item">&nbsp;</button>
+                                    <div class="ps__rail-x" style="left: 0px; bottom: 0px;"><div class="ps__thumb-x" tabindex="0" style="left: 0px; width: 0px;"></div></div><div class="ps__rail-y" style="top: 0px; right: 0px;"><div class="ps__thumb-y" tabindex="0" style="top: 0px; height: 0px;"></div></div>
+                                </div>
+                            </div>
+                            <ul class="nav flex-column">
+                                <li class="nav-item-divider nav-item"></li>
+                                <li class="nav-item-btn nav-item">
+                                   
+                                </li>
+                            </ul>
+                        </div>
+                    </li>
+                }
+
+                @if (usrRoles == "Administrator")
+                {
+                  
+                    <li class="btn-group nav-item">
+                        <a class="nav-link" data-toggle="dropdown" aria-expanded="false">
+                            Settings
+                            <i class="fa fa-angle-down ml-2 opacity-5"></i>
+                        </a>
+                        <div tabindex="-1" role="menu" aria-hidden="true" class="rm-pointers dropdown-menu" id="SettingsMenu">
+                            <div class="dropdown-menu-header">
+                                <div class="dropdown-menu-header-inner bg-secondary">
+                                    <div class="menu-header-image opacity-5" style="background-image: url('assets/images/dropdown-header/city3.jpg');"></div>
+                                    <div class="menu-header-content">
+                                        <h6 class="menu-header-title">Master</h6>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="scroll-area-xs">
+                                <div class="scrollbar-container ps">
+                                    <button type="button" tabindex="5" class="dropdown-item" onclick="loadAUEUMSRegister()">Users</button>
+                                    <button type="button" tabindex="6" class="dropdown-item" onclick="loadTimetableAll()">Timetable</button>
+                                    <button type="button" tabindex="7" class="dropdown-item">&nbsp;</button>
+                                    <button type="button" tabindex="8" class="dropdown-item">&nbsp;</button>
+                                    <div class="ps__rail-x" style="left: 0px; bottom: 0px;"><div class="ps__thumb-x" tabindex="0" style="left: 0px; width: 0px;"></div></div><div class="ps__rail-y" style="top: 0px; right: 0px;"><div class="ps__thumb-y" tabindex="0" style="top: 0px; height: 0px;"></div></div>
+                                </div>
+                            </div>
+                            <ul class="nav flex-column">
+                                <li class="nav-item-divider nav-item"></li>
+                                <li class="nav-item-btn nav-item">
+                                   
+                                </li>
+                            </ul>
+                        </div>
+                    </li>
+                }
+
+            </ul>
+            <div class="widget-content p-0">
+                <div class="widget-content-wrapper">
+                    <div class="widget-content-left">
+                        <div class="btn-group">
+                            <a data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" class="p-0 btn">
+
+                                <img width="42" class="rounded" src="~/images/D-image.png">
+
+                                <i class="fa fa-angle-down ml-2 opacity-8"></i>
+                            </a>
+                            <div tabindex="-1" role="menu" aria-hidden="true" class="rm-pointers dropdown-menu-lg dropdown-menu dropdown-menu-right">
+                                <div class="dropdown-menu-header">
+                                    <div class="dropdown-menu-header-inner bg-info">
+                                        <div class="menu-header-image opacity-2"></div>
+                                        <div class="menu-header-content text-left">
+                                            <div class="widget-content p-0">
+                                                <div class="widget-content-wrapper">
+                                                    <div class="widget-content-left mr-3">
+
+                                                        @* @if (User.Claims.Where(x => x.Type == "urn:google:picture").FirstOrDefault() != null)
+                                                        {
+                                                            <img width="42" class="rounded-circle" src=@User.Claims.Where(x => x.Type == "urn:google:picture").FirstOrDefault().Value>
+
+                                                        }
+                                                        else
+                                                        { }*@
+                                                        <img width="42" class="rounded" src="~/images/D-image.png">
+
+
+                                                    </div>
+                                                    <div class="widget-content-left">
+                                                        <div class="widget-heading">
+
+                                                            @if (User.Identity.IsAuthenticated)
+                                                            {
+                                                                @User.Identity.Name
+
+                                                            }
+                                                        </div>
+
+                                                    </div>
+                                                    <div class="widget-content-right mr-2">
+                                                        <button id="btnLogout" class="btn-pill btn-shadow btn-shine btn btn-focus">
+                                                            Logout
+                                                        </button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                    <div class="widget-content-left  ml-3 header-user-info">
+                        @if (usrRoles == "Administrator")
+                        {
+                            <div class="widget-heading">
+                                @if (User.Identity.IsAuthenticated)
+                                {
+                                    @User.Identity.Name
+
+                                }
+                            </div>
+                            <div class="widget-subheading">
+                                @if (User.Identity.IsAuthenticated)
+                                {
+                                    @User.Claims.FirstOrDefault(x => x.Type == System.Security.Claims.ClaimTypes.Role).Value
+                                    ;
+                                }
+                            </div>
+                        }
+                        else
+                        {
+                            <div class="widget-heading">
+                                Hello <span>
+                                    @if (User.Identity.IsAuthenticated)
+                                    {
+                                        @User.Identity.Name
+
+                                    }
+                                </span>
+                            </div>
+                        }
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+
+</div>
+
+
+
+<script>
+
+     $(document).ready(function () {
+         $.ajaxSetup({
+             beforeSend: function (xhr) {
+                 xhr.setRequestHeader("RequestVerificationToken",
+                     $('input:hidden[name="__RequestVerificationToken"]').val());
+             },
+         });
+     });
+
+
+     function loadDashboard() {
+         $("#myPartialViewContainer").load($("#loadDashboard").val() + "?mode=detail&ctrlid=ctrlId&src=loadDashboard");
+         $("#displayquick").load($("#DefaultQuick").val());
+         $('#RightSlidingWindow').attr('class', 'ui-theme-settings');
+
+     }
+     function loadDashboardFaculty() {
+
+         $("#myPartialViewContainer").load($("#DashboardFaculty").val() + "?mode=detail&ctrlid=ctrlId");
+         $("#displayquick").load($("#DefaultQuick").val());
+         $('#RightSlidingWindow').attr('class', 'ui-theme-settings');
+
+         $("#tabInternalSales").removeClass("show");
+         $("#tabExternalSales").removeClass("show");
+         $("#SettingsMenu").removeClass("show");
+
+
+     }
+      function loadDashboardStudent() {
+         $("#myPartialViewContainer").load($("#DashboardStudent").val() + "?mode=detail&ctrlid=ctrlId&src=loadDashboard");
+         $("#displayquick").load($("#DefaultQuick").val());
+         $('#RightSlidingWindow').attr('class', 'ui-theme-settings');
+
+     }
+       function loadDashboardAdmin() {
+         $("#myPartialViewContainer").load($("#DashboardAdmin").val() + "?mode=detail&ctrlid=ctrlId&src=loadDashboard");
+         $("#displayquick").load($("#DefaultQuick").val());
+         $('#RightSlidingWindow').attr('class', 'ui-theme-settings');
+
+     }
+   
+
+     function loadAUEUMSRegister() {
+         $("#myPartialViewContainer").load($("#AUEUMSRegisterAll").val() + "?mode=detail&ctrlid=ctrlId");
+         $("#displayquick").load($("#DefaultQuick").val());
+         $('#RightSlidingWindow').attr('class', 'ui-theme-settings');
+         $("#tabInternalSales").removeClass("show");
+         $("#tabExternalSales").removeClass("show");
+         $("#SettingsMenu").removeClass("show");
+     };
+
+     function loadTimetableAll() {
+         
+         $("#myPartialViewContainer").load($("#TimetableList").val() + "?mode=detail&ctrlid=ctrlId");
+         $("#displayquick").load($("#DefaultQuick").val());
+         $('#RightSlidingWindow').attr('class', 'ui-theme-settings');
+
+         $("#tabInternalSales").removeClass("show");
+         $("#tabExternalSales").removeClass("show");
+         $("#SettingsMenu").removeClass("show");
+     };
+
+    
+     function loadAssignmentsAll() {
+         $("#myPartialViewContainer").load($("#AssignmentsAll").val() + "?mode=detail&ctrlid=ctrlId");
+         $("#displayquick").load($("#DefaultQuick").val());
+         $('#RightSlidingWindow').attr('class', 'ui-theme-settings');
+
+         $("#tabInternalSales").removeClass("show");
+         $("#tabExternalSales").removeClass("show");
+         $("#SettingsMenu").removeClass("show");
+     };
+
+      function loadStudentEvaluation() {
+         $("#myPartialViewContainer").load($("#StudentEvaluation").val() + "?mode=detail&ctrlid=ctrlId");
+         $("#displayquick").load($("#DefaultQuick").val());
+         $('#RightSlidingWindow').attr('class', 'ui-theme-settings');
+
+         $("#tabInternalSales").removeClass("show");
+         $("#tabExternalSales").removeClass("show");
+         $("#SettingsMenu").removeClass("show");
+     };
+
+    function loadAssignmentsPostedAll() {
+         $("#myPartialViewContainer").load($("#StudentAssignmentsAll").val() + "?mode=detail&ctrlid=ctrlId");
+         $("#displayquick").load($("#DefaultQuick").val());
+         $('#RightSlidingWindow').attr('class', 'ui-theme-settings');
+
+         $("#tabInternalSales").removeClass("show");
+         $("#tabExternalSales").removeClass("show");
+         $("#SettingsMenu").removeClass("show");
+     };
+
+     $('#btnLogout').on("click", function () {
+         var backlen = history.length;
+         history.go(backlen);
+         window.location.href = $("#Logout").val();
+     });
+
+
+</script>

@@ -1,0 +1,231 @@
+﻿<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta http-equiv="Content-Language" content="en">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>Al Shirawi OCC</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, shrink-to-fit=no" />
+    <meta name="description" content="This is an example dashboard created using build-in elements and components.">
+    <meta name="msapplication-tap-highlight" content="no">
+    <link href="~/css/main.css" rel="stylesheet">
+    <link rel="stylesheet" href="~/css/jquery.dataTables.min.css">
+
+    <script type="text/javascript" src="~/scripts/main.js"></script>
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/jquery-ui/jquery-ui.min.js"></script>
+    <link href="~/lib/jquery-ui/themes/ui-lightness/jquery-ui.css" rel="stylesheet" />
+    <link href="~/lib/jquery-ui/themes/ui-lightness/theme.css" rel="stylesheet" />
+    <script src="~/js/jquery.dataTables.min.js"></script>
+    <script src="~/js/dataTables.fixedHeader.min.js"></script>
+    <script src="~/js/dataTables.buttons.min.js"></script>
+    <script src="~/js/dataTables.select.min.js"></script>
+    <script src="~/js/dataTables.editor.min.js"></script>
+    <script src="~/js/buttons.flash.min.js"></script>
+    <script src="~/js/jszip.min.js"></script>
+    <script src="~/js/pdfmake.min.js"></script>
+    <script src="~/js/vfs_fonts.js"></script>
+    <script src="~/js/buttons.html5.min.js"></script>
+    <script src="~/js/buttons.print.min.js"></script>
+
+
+    <link href="~/css/bootstrap-multiselect.css" rel="stylesheet" />
+    <script src="~/js/bootstrap-multiselect.js"></script>
+    <script src="~/js/jquery.number.js"></script>
+
+</head>
+<body>
+    <div class="app-container app-theme-white body-tabs-shadow fixed-sidebar fixed-header">
+        <div class="app-header header-shadow bg-dark header-text-light">
+            <div class="app-header__logo">
+                <div class="logo-src"></div>
+                <div class="header__pane ml-auto">
+                    <div>
+                        <button type="button" class="hamburger close-sidebar-btn hamburger--elastic" data-class="closed-sidebar">
+                            <span class="hamburger-box">
+                                <span class="hamburger-inner"></span>
+                            </span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+            <div class="app-header__mobile-menu">
+                <div>
+                    <button type="button" class="hamburger hamburger--elastic mobile-toggle-nav">
+                        <span class="hamburger-box">
+                            <span class="hamburger-inner"></span>
+                        </span>
+                    </button>
+                </div>
+            </div>
+            <div class="app-header__menu">
+                <span>
+                    <button type="button" class="btn-icon btn-icon-only btn btn-primary btn-sm mobile-toggle-header-nav">
+                        <span class="btn-icon-wrapper">
+                            <i class="fa fa-ellipsis-v fa-w-6"></i>
+                        </span>
+                    </button>
+                </span>
+            </div>
+            @Html.Partial("Navigation1")
+        </div>
+       
+        <div id="RightSlidingWindow" class="ui-theme-settings">
+            <button type="button" id="TooltipDemo">
+                <p id="TooltipMsg" style="max-width:125px;font-family:'Comic Sans MS';font-size:13px;color:darkblue;" ></p>
+            </button>
+            <div class="theme-settings__inner">
+                <div class="scrollbar-container">
+                    <div class="theme-settings__options-wrapper">
+                        @*<h3 class="themeoptions-heading">
+                        Add New
+                    </h3>*@
+                        <div id="displayquick"></div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="app-main">
+            <button onclick="topFunction()" id="myBtn" title="Go to top">Top</button>
+    <div class="app-main__outer">
+                <div id="myPartialViewContainer">
+                    <!-- Content Header (Page header) -->
+                    @RenderBody()
+                    <!-- /.content -->
+                </div>
+                <div class="app-wrapper-footer">
+                    <div class="app-footer">
+                        <div class="app-footer__inner">
+                            <div class="app-footer-left">
+                               
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="ErrorPopup" class="modal fade">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                                <h4 class="modal-title">Error(s)</h4>
+                            </div>
+                            <div class="modal-body">
+                                <div id="CustomErrors" style="visibility: hidden">
+                                    <table id="ErrorsTable">
+                                        <tr>
+                                            <th>
+                                                <h3 class=""><small>Errors</small></h3>
+                                            </th>
+                                        </tr>
+                                        <tbody>
+                                            <tr>
+                                                <td></td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="delete-dialog" class="modal fade">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                                <h4 class="modal-title">Confirm Deletion</h4>
+                            </div>
+                            <div class="modal-body">
+                                Are you to sure to delete?
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" id="btnContinue" class="btn btn-default" data-dismiss="modal">Continue</button>
+                                <button type="button" id="btnCancel" class="btn btn-default" data-dismiss="modal">Cancel</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div id="SuccessPopUp" class="modal fade">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                                <h4 class="modal-title">Successfull</h4>
+                            </div>
+                            <div class="modal-body">
+                                Created Successfully
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" id="btnContinue" class="btn btn-default" data-dismiss="modal">Continue</button>
+                                <button type="button" id="btnCancel" class="btn btn-default" data-dismiss="modal">Cancel</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        
+        </div>
+    </div>
+    
+    @RenderSection("scripts", required: false)
+</body>
+</html>
+
+<script>
+    $(document).ready(function () {
+        $('#TooltipDemo').on("click", function () {      
+            $('#TooltipDemo').removeClass('btn-open-options btn bs-tooltip-top');
+            $("#TooltipDemo").attr('style', 'display:none');
+            $('#TooltipMsg').text("");
+            $('#TooltipDemo').hide();           
+        });
+    });
+  
+    function showToolTip(msg) {
+        $("#TooltipDemo").removeAttr('style');
+        $('#TooltipDemo').addClass('btn-open-options btn bs-tooltip-top');       
+        $('#TooltipMsg').text(msg);       
+        var seconds = 5;
+        setTimeout(function () {
+            $('#TooltipDemo').removeClass('btn-open-options btn bs-tooltip-top');
+            $('#TooltipMsg').text(""); 
+             $("#TooltipDemo").attr('style', 'display:none');
+        }, seconds * 1000);
+    }
+
+    function hideSideBar() {
+          $('#RightSlidingWindow').removeAttr('class');
+          $('#RightSlidingWindow').attr('class', 'ui-theme-settings');
+    }
+
+    function showSideBar() {
+         $('#RightSlidingWindow').attr('class', 'ui-theme-settings settings-open');
+    }
+
+    mybutton = document.getElementById("myBtn");
+
+    // When the user scrolls down 20px from the top of the document, show the button
+    window.onscroll = function() {scrollFunction()};
+
+    function scrollFunction() {
+      if (document.body.scrollTop > 20 || document.documentElement.scrollTop > 20) {
+        mybutton.style.display = "block";
+      } else {
+        mybutton.style.display = "none";
+      }
+    }
+
+    // When the user clicks on the button, scroll to the top of the document
+    function topFunction() {
+      document.body.scrollTop = 0; // For Safari
+      document.documentElement.scrollTop = 0; // For Chrome, Firefox, IE and Opera
+    }
+</script>

@@ -1,0 +1,319 @@
+﻿@model AUEUMS.View_Models.AUEUMSRegisterListViewModel
+
+@Html.Hidden("NewAUEUMSRegister", Url.Action("NewAUEUMSRegister", "Admin"))
+@Html.Hidden("ActivateDeactivateAUEUMSRegister", Url.Action("ActivateDeactivateAUEUMSRegister", "Admin"))
+@Html.Hidden("GetAUEUMSRegister", Url.Action("GetAUEUMSRegister", "Admin"))
+
+@Html.Hidden("GetUserForApproval", Url.Action("GetUserForApproval", "Admin"))
+
+@Html.Hidden("RefreshAUEUMSRegister", Url.Action("RefreshAUEUMSRegister", "Admin"))
+@Html.Hidden("UserListmode", Model.mode)
+@Html.Hidden("NewAUEUMSRegisterSrc", Model.src)
+
+@Html.Hidden("AUEUMSRegisterAll", Url.Action("AUEUMSRegisterAll", "Admin"))
+
+@Html.Hidden("ViewAUEUMSUsersPartial", Url.Action("getAUEUMSUserListPartialViewForContainer", "Admin"))
+
+@{
+
+    @Html.AntiForgeryToken()
+}
+@{
+    var usrRoles = User.Claims.FirstOrDefault(x => x.Type == System.Security.Claims.ClaimTypes.Role).Value;
+}
+<div class="form-row">
+    <div class="col-md-12" id="ContactsDiv">
+        <div class="position-relative form-group">
+
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="main-card mb-3 card">
+                        <div class="card-body table-responsive" id="quoteHeaderDetails">
+                            <table id="AUEUMSUsersDetails" class="table table-bordered table-striped table-condensed display" width="99%">
+                                <thead>
+                                    <tr>
+                                        <th style="width:2px;" hidden>SecretKey</th>
+                                        <th style="width:70px;">Name</th>
+                                       @*  <th style="width:70px;">Email</th>
+                                        <th style="width:50px;">Email Verified</th>                                        
+                                        <th style="width:40px;color:maroon;">Active</th>
+                                        <th style="width:120px;color:maroon;">User Details</th>
+                                        <th style="width:220px;">Action</th> *@
+
+                                    </tr>
+                                </thead>
+
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+</div>
+
+<script>
+    $(document).ready(function () {
+
+        $.ajaxSetup({
+            beforeSend: function (xhr) {
+                xhr.setRequestHeader("RequestVerificationToken",
+                    $('input:hidden[name="__RequestVerificationToken"]').val());
+            },
+        });
+
+
+
+        var userRolename = $("#usrRoleshidden").val();
+
+
+        var contactsTablec = $("#AUEUMSUsersDetails").DataTable({
+            processing: true,
+            serverSide: true,
+            ordering: true,
+            lengthMenu: [10, 25, 50, 100, 500, 1000],
+            dom: 'Qlfrtip',
+            search: {
+                return: true
+            },
+            ajax: function (data, callback, settings) {
+                $.ajax({
+                    url: "/Admin/GetAllAUEUMSExternalUsersJson",
+                    type: "Post",
+                    dataType: "json",
+                    contentType: "application/json",
+                    data: JSON.stringify({
+                        'Id': parseInt(0), 'src': 'external', 'draw': data.draw, 'start': data.start, 'length': data.length, 'column': data.columns[data.order[0].column].data, 'dir': data.order[0].dir, 'searchStr': data.search.value
+                    }),
+                    success: function (response, textStatus, jQxhr) {
+                        alert(response.data);
+                        callback({
+                            //draw: response.draw,
+                            data: response.data,
+                            recordsTotal: response.recordsTotal,
+                            recordsFiltered: response.recordsFiltered
+
+
+                        })
+                    },
+                    error: function (jqXhr, textStatus, errorThrown) {
+                    }
+
+                });
+            },
+            "columns": [
+                {
+                    "data": "SecretKey",
+                    "type": "int",
+                    "render": function (data, type, row, meta) {
+                        return "<div class='text-center' hidden>" + row.SecretKey + "</div>";
+                    }
+                },
+                { "data": "UserNameDisplay" },
+
+            ],
+            "columnDefs": [{
+                "targets": [0],
+                "visible": false,
+                "searchable": false
+            },
+            {
+                "targets": [0],
+                "orderable": false,
+                "searchable": false
+            }
+            ],
+            "order": [[0, 'desc']],
+            "dom": '<"top"Bfl>iprt<"bottom">p<"clear">',
+            "stateSave": true,
+
+            "buttons": [
+                {
+                    "extend": 'excel',
+                    "className": 'btn btn-outline-secondary',
+                    "exportOptions": {
+                        "columns": [1]
+                    }
+                }
+
+            ]
+
+        });
+
+
+
+        $('#btnshowAddAUEUMSUsers').on("click", function () {
+
+
+            var mode = $("#UserListmode").val();
+            /*   var AccountIdQuick =$("#AccountIdQuick").val();*/
+            $("#displayquick").load($("#NewAUEUMSRegister").val() + "?mode=" + mode + "&AUEUMSRegisterID=-1");
+            $('#RightSlidingWindow').attr('class', 'ui-theme-settings settings-open');
+            event.preventDefault();
+            event.stopPropagation();
+        });
+
+
+
+
+        var EditMachineObj;
+        var uriEditClientObj;
+        $('#AUEUMSUsersDetails tbody').on('click', '.btnSelectContact', function () {
+
+            EditMachineObj = $(this);  //for future use
+            uriEditClientObj = EditMachineObj[0].attributes['1'].textContent;
+            uriEditClientObj = $(this).attr('data');
+            var AUEUMSRegisterID = getUrlParameter("AUEUMSRegisterID", uriEditClientObj);
+            $("#AUEUMSRegisterID").val(AUEUMSRegisterID);
+            event.preventDefault();
+            event.stopPropagation();
+            $('#RightSlidingWindow').removeAttr('class');
+            $('#RightSlidingWindow').attr('class', 'ui-theme-settings');
+
+        });
+
+        var EditAUEUMSUsersObj;
+        var uriAUEUMSUsersClientsObj;
+        $('#AUEUMSUsersDetails tbody').on('click', '.btnEditContact', function () {
+
+
+            var mode = $("#UserListmode").val();
+            EditAUEUMSUsersObj = $(this);  //for future use
+            uriAUEUMSUsersClientsObj = EditAUEUMSUsersObj[0].attributes['1'].textContent;
+            uriAUEUMSUsersClientsObj = $(this).attr('data');
+            var AUEUMSRegisterID = getUrlParameter("Id", uriAUEUMSUsersClientsObj);
+            $("#displayquick").load($("#GetAUEUMSRegister").val() + "?mode=" + mode + "&Id=" + AUEUMSRegisterID);
+            $('#RightSlidingWindow').attr('class', 'ui-theme-settings settings-open');
+            event.preventDefault();
+            event.stopPropagation();
+        });
+
+
+        var PostAUEUMSUsersObj;
+        var uriAUEUMSUsersClientsObj;
+        $('#AUEUMSUsersDetails tbody').on('click', '.btnUserApproval', function () {
+
+            var mode = $("#UserListmode").val();
+            PostAUEUMSUsersObj = $(this);  //for future use
+            uriAUEUMSUsersClientsObj = PostAUEUMSUsersObj[0].attributes['1'].textContent;
+            uriAUEUMSUsersClientsObj = $(this).attr('data');
+            var AUEUMSRegisterID = getUrlParameter("Id", uriAUEUMSUsersClientsObj);
+            $("#displayquick").load($("#GetUserForApproval").val() + "?mode=" + mode + "&Id=" + AUEUMSRegisterID);
+            $('#RightSlidingWindow').attr('class', 'ui-theme-settings settings-open');
+            event.preventDefault();
+            event.stopPropagation();
+        });
+
+
+        var DeleteUserObj;
+        var uriDeleteClientsObj;
+        $('#AUEUMSUsersDetails tbody').on('click', '.btnDeactivateUsers', function () {
+
+
+            DeleteUserObj = $(this);  //for future use
+            uriDeleteClientsObj = DeleteUserObj[0].attributes['1'].textContent;
+            uriDeleteClientsObj = $(this).attr('data');
+            var AUEUMSRegisterID = getUrlParameter("Id", uriDeleteClientsObj);
+            var UsrId = getUrlParameter("UsrId", uriDeleteClientsObj);
+
+            var DeActivated = getUrlParameter("DeActivated", uriDeleteClientsObj);
+            var deActivatedFlag = false;
+            if (DeActivated != "" || DeActivated != null) {
+                deActivatedFlag = DeActivated
+            }
+            else {
+                deActivatedFlag = "";
+            }
+
+            var AUEUMSRegisterViewModel = {
+                "Id": parseInt(AUEUMSRegisterID),
+                "InactiveDisplayFlag": deActivatedFlag,
+                "UsrId": UsrId,
+
+            };
+            $.ajax({
+                url: $("#ActivateDeactivateAUEUMSRegister").val(),
+                type: "Post",
+                dataType: "json",
+                contentType: "application/json; charset=utf-8",
+                headers: {
+                    RequestVerificationToken:
+                        $('input:hidden[name="__RequestVerificationToken"]').val()
+                },
+                data: JSON.stringify(AUEUMSRegisterViewModel),
+                cache: false,
+                success: function (result) {
+
+                    var resultdata = JSON.parse(result);
+                    if (resultdata.Usermessage == 1) {
+
+
+                        var mode = $("#UserListmode").val();
+                        if (mode != "detail") {
+                            $("#myPartialViewContainer").load($("#AUEUMSRegisterAll").val() + "?mode=detail&ctrlid=ctrlId");
+                        }
+                        else {
+
+                            $("#myPartialViewContainer").load($("#AUEUMSRegisterAll").val() + "?mode=detail&ctrlid=ctrlId");
+                        }
+                        showToolTip('Design Plus 2.0 User updated successfully');
+                        $('#DeleteClientpopup').removeAttr('class');
+                        $('#DeleteClientpopup').attr('class', 'modal fade');
+                        $('#DeleteClientpopup').removeAttr('style');
+                        $('#DeleteClientpopup').removeAttr('aria-hidden');
+                        $('#DeleteClientpopup').attr('area-modal', 'false');
+                        $("#clientdeletionmsg").text('');
+                        $("#hclientDId").val('');
+                    }
+                    //else if (resultdata.Usermessage == -1) {
+                    //    $("#clientdeletionmsg").text('Client Exists');
+                    //}
+                    else if (resultdata.Usermessage == -2) {
+                        showToolTip('Data Core Exception');
+                    }
+                    else if (resultdata.Usermessage == -4) {
+                        showToolTip('Model data invalid, cannot mapp models');
+                    }
+                    else {
+                        showToolTip('API call error');
+                    }
+                },
+                fail: function (response) {
+                    alert("JSON Error, Saving Selection - Please see System Adimistrator");
+                }
+            });
+
+
+        });
+
+
+        $('#btnCloseDeleteClient').on("click", function () {
+            $('#DeleteClientpopup').removeAttr('class');
+            $('#DeleteClientpopup').attr('class', 'modal fade');
+            $('#DeleteClientpopup').removeAttr('style');
+            $('#DeleteClientpopup').removeAttr('aria-hidden');
+            $('#DeleteClientpopup').attr('area-modal', 'false');
+            $("#clientdeletionmsg").text('');
+            $("#hclientDId").val('');
+
+        });
+
+
+
+    });
+    function refreshList() {
+        $("#myPartialViewContainer").load($("#QuoteList").val() + "?MenuID=1&size=0");
+        $("#mnuQuoteManager1").addClass("mm-active");
+        $("#firstli").addClass("mm-active");
+    }
+
+    function getUrlParameter(name, uri) {
+        name = name.replace(/[\[]/, '\\[').replace(/[\]]/, '\\]');
+        var regex = new RegExp('[\\?&]' + name + '=([^&#]*)');
+        var results = regex.exec(uri);
+        return results === null ? '' : decodeURIComponent(results[1].replace(/\+/g, ' '));
+    }
+
+</script>

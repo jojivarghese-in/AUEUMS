@@ -1,0 +1,150 @@
+﻿@model AUEUMS.View_Models.TimetableDetailListViewModel
+
+@Html.Hidden("GetTTDetailsEdit", Url.Action("GetTTDetailsEdit", "Admin"))
+@Html.Hidden("NewTimetableDetails", Url.Action("NewTimetableDetails", "Admin"))
+@Html.Hidden("TimetableDetailsmode", Model.mode)
+@Html.Hidden("TimetableHrdId", Model.Hdrparamid)
+
+
+@Html.AntiForgeryToken()
+
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+@addTagHelper *, AuthoringTagHelpers
+<!doctype html>
+<html lang="en">
+
+<head> 
+</head>
+<body>
+<div class="app-main__inner">
+
+    <form id="formid" class="needs-validation" novalidate>
+                    <div class="main-card card" style="width:100%">
+                        <div style="background-color: beige;">
+                            <div id="overlay">
+                                <div class="cv-spinner">
+                                    <span class="spinner"></span>
+                                </div>
+                            </div>
+
+                            <div class="main-card card" style="width:100%">
+                                <div class="card-body">
+                                    <div class="btn-group">
+                                        @*  <a id="btnNewTimetableHeader" href="#">
+                                                <i class="pe-7s-plus"></i>New
+                                            </a> *@
+                                    </div>
+
+                                    <div id="divTimetablehdr" class="table-responsive">
+                                        <table class="table table-bordered table-striped table-condensed display" id="StudentTimetableDtl">
+                                            <thead>
+                                                <tr>
+
+                                                    <th style="width:100px;">Course</th>
+                                                    <th style="width:100px;">Section</th>
+                                                    <th style="width:100px;">TimeSlot</th>
+                                                    <th style="width:80px;">SeatAllowed</th>
+                                                    <th style="width:80px;">DayName</th>
+                                                    <th style="width:80px;">Action</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+
+                                                @foreach (var item in Model.timetableDetails)
+                                                {
+                                                    <tr>
+                                                        <td>@item.tblCourse.CourseName</td>
+                                                        <td>@item.tblCourseSection.ClassName</td>
+                                                        <td>@item.tblTimeSlot.TimeSlot</td>
+                                                        <td>@item.tblCourseSection.SeatAllowed</td>
+                                                        <td>@item.tblDays.DayName</td>
+                                                        <td>
+                                                        <div class="tooltipSlideLeft">
+                                                            <a data="testpara=2&tdtlId=@item.Id" data-toggle="modal" type="button" class="btngrid btnModifyttDetails" style="cursor: pointer;padding-right: 10px;">
+                                                                <i class="pe-7s-pen" style="color:blueviolet;font-size:medium;font-weight:bold;"></i>
+                                                            </a>
+                                                        <span class="tooltiptextSlideLeft">
+                                                            Edit
+                                                        </span>
+                                                        </div>
+
+                                                        </td>
+
+                                                    </tr>
+
+                                                }
+
+                                            </tbody>
+                                        </table>
+                                    </div>
+
+                                    <div class="position-relative form-group" hidden>
+                                        <button class="mb-2 mr-2 btn btn-light" type="button" id="tbnCancelSideBar">Cancel</button>
+                                    </div>
+
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                </form>
+
+</div>
+</body>
+</html>
+
+<script>
+    var $ = $.noConflict();
+    $(document).ready(function () {
+      
+
+        $.ajaxSetup({
+            beforeSend: function (xhr) {
+                xhr.setRequestHeader("RequestVerificationToken",
+                    $('input:hidden[name="__RequestVerificationToken"]').val());
+            },
+        });
+
+        $('#tbnCancelSideBar').on("click", function () {
+            $('#RightSlidingWindow').removeAttr('class');
+            $('#RightSlidingWindow').attr('class', 'ui-theme-settings');
+        });
+
+      $('#StudentTimetableDtl').DataTable({
+        dom: "Bfrtip",
+        buttons: [
+        ]
+        });
+
+        var SelTimetableDtlObj;
+        var uriEditClientsObj;
+        $('#StudentTimetableDtl tbody').on('click', '.btnModifyttDetails', function () {
+            
+        var mode = $("#TimetableDetailsmode").val();
+        var timetableHrdId = $("#TimetableHrdId").val();
+
+        SelTimetableDtlObj = $(this);
+        uriEditClientsObj = SelTimetableDtlObj[0].attributes['1'].textContent;
+        uriEditClientsObj = $(this).attr('data');
+        var timetabletdtlId = getUrlParameter("tdtlId", uriEditClientsObj);
+
+         $("#displayquick").load($("#GetTTDetailsEdit").val() + "?mode=" + mode + "&HdrId=" + timetableHrdId+ "&DtlId=" + timetabletdtlId);
+        $('#RightSlidingWindow').attr('class', 'ui-theme-settings settings-open');
+
+         });
+      
+
+    });
+
+    function getUrlParameter(name, uri) {
+        name = name.replace(/[\[]/, '\\[').replace(/[\]]/, '\\]');
+        var regex = new RegExp('[\\?&]' + name + '=([^&#]*)');
+        var results = regex.exec(uri);
+        return results === null ? '' : decodeURIComponent(results[1].replace(/\+/g, ' '));
+    }
+
+
+
+</script>
+
+

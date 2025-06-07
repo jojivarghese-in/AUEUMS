@@ -1,0 +1,35 @@
+﻿@model AUEUMS.View_Models.AUEUMSRegisterListViewModel
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+@addTagHelper *, AuthoringTagHelpers
+<div class="app-main__inner">
+    <div class="app-page-title">
+        <div class="page-title-wrapper">
+            <div class="page-title-heading">
+                <div class="page-title-icon">
+                    <i class="pe-7s-display1 icon-gradient bg-premium-dark">
+                    </i>
+                </div>
+                <div>
+                    Users
+                    <div class="page-title-subheading">
+
+                    </div>
+                </div>
+            </div>
+
+
+        </div>
+    </div>
+
+    @if (Model.registers.Count() > 0)
+    {
+        Html.RenderPartial("UserManagerList", Model.registers);
+    }
+</div>
+
+
+
+
+
+
+

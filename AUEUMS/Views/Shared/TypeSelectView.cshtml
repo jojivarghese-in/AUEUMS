@@ -1,0 +1,11 @@
+﻿@model AUEUMS.View_Models.TypeListViewModel
+
+@Html.AntiForgeryToken()
+<label for="ProductDetails" class="">Type</label>
+<select asp-for="typeMem" name="type" id="type" class="form-control"
+        asp-items="@(new SelectList(Model.Types,"DisplayValue", "DisplayValue"))" >
+    <option value="">Select</option>
+</select>   
+
+
+

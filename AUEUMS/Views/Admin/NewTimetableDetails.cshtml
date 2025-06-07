@@ -1,0 +1,201 @@
+﻿@model AUEUMS.View_Models.TimetableDetailViewModel
+@{
+    @Html.Hidden("AddTimetableDetail", Url.Action("AddTimetableDetail", "Admin"))
+    @Html.Hidden("UpdateTimetableDetail", Url.Action("UpdateTimetableDetail", "Admin"))
+
+    @Html.Hidden("TTDetailIdQuick", Model.Id)
+
+    @Html.Hidden("THeaderIdParam", Model.TimeTableHdrParamId)
+    
+    @Html.Hidden("modeTTDetailQuick", Model.mode)
+
+    @Html.Hidden("TimetableList", Url.Action("TimetableList", "Admin"))
+
+    @Html.Hidden("refreshCourseSecSelectView", Url.Action("refreshCourseSecSelectView", "Admin"))
+    
+
+    @Html.AntiForgeryToken()
+}
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+@addTagHelper *, AuthoringTagHelpers
+
+<div class="col-md-12">
+    <div class="main-card mb-12 card">
+        <div class="card-body" style="padding-bottom:20px;padding-top:20px;">
+            <h5 class="card-title"><label id="prjTitle">@Model.title</label></h5>
+            <form id="formid" class="needs-validation" novalidate>
+
+                <div class="form-row">
+                    <div class="col-md-12 mb-3 position-relative form-group">
+                        <label for="lblCourse" class="">Course</label>
+                        <select asp-for="CourselistId" name="tdlCourse" id="tdlCourse" class="form-control"
+                                asp-items="@(new SelectList(Model.tblCourselist, "Id", "displayCourseName",Model.CourselistId))" required>
+                            <option value="">Select</option>
+                        </select>
+                    </div>
+                   </div>
+                <div class="form-row">
+                    <div class="col-md-12 mb-3 position-relative form-group">                 
+                      
+                        <div id="crsSectionContainer" class="position-relative form-group">
+                            <partial name="../Shared/CourseSecSelectView.cshtml" for="crsSecListViewModel">
+                        </div>
+                      @*   <label for="lblCourseSec" class="">Days</label>
+
+                        <select asp-for="CourseSeclistId" name="tdlCourseSec" id="tdlCourseSecCourseSec" class="form-control"
+                                asp-items="@(new SelectList(Model.tblCourseSeclist,"Id","ClassName",Model.CourseSeclistId))">
+                            <option value="">Select</option>
+                        </select> *@
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="col-md-6 mb-3 position-relative form-group">
+                        <label for="lblDays" class="">Days</label>
+                        <select asp-for="DayslistId" name="tdlDays" id="tdlDays" class="form-control"
+                                asp-items="@(new SelectList(Model.tblDayslist, "Id", "DayName",Model.DayslistId))" required>
+                            <option value="">Select</option>
+                        </select>
+                    </div>
+                    <div class="col-md-6 mb-3 position-relative form-group">
+                        <label for="lblTimeSlot" class="">Time Slot</label>
+                        <select asp-for="TimeSlotlistId" name="tdlTimeSlot" id="tdlTimeSlot" class="form-control"
+                                asp-items="@(new SelectList(Model.tblTimeSlotlist, "Id", "TimeSlot",Model.TimeSlotlistId))" required>
+                            <option value="">Select</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="position-relative form-group">
+                    <button class="mt-1 btn btn-primary" id="tbnSubmit">Submit</button>
+                    <button class="mt-1 btn btn-light" type="button" id="tbnCancelSideBar">Cancel</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<script>
+
+    $(document).ready(function () {
+
+        $('#tbnCancelSideBar').on("click", function () {
+            $('#RightSlidingWindow').removeAttr('class');
+            $('#RightSlidingWindow').attr('class', 'ui-theme-settings');
+        });
+
+        $('.Numberformat').number(true, 2);
+        $('.wholeNumberformat').number(true, 0);
+
+        $('#tdlCourse').on('change', function () {
+            
+            var tdlCourseId = $('#tdlCourse').val();
+            $("#crsSectionContainer").load($("#refreshCourseSecSelectView").val() + "?tdlCourseId=" + parseInt(tdlCourseId));
+            
+        });
+
+    });
+    var forms = document.getElementsByClassName('needs-validation');
+  
+    var validation = Array.prototype.filter.call(forms, function (form) {
+        form.addEventListener('submit', function (event) {
+
+            if (form.checkValidity() === false) {
+                event.preventDefault();
+                event.stopPropagation();
+                //alert('Add Mandatory Fields');
+                showToolTip('Add Mandatory Fields')
+                form.classList.add('was-validated');
+            }
+            else {        
+         
+               var selCrsSection=$("#selCourseSec").val();
+
+                var TimetableDetailViewModel = {
+                    "Id": parseInt($("#TTDetailIdQuick").val()),
+                    "TimeTableHdrParamId": parseInt($("#THeaderIdParam").val()),
+                    "CourselistId":parseInt($("#tdlCourse").val()),
+                    "CourseSeclistId":parseInt(selCrsSection),
+                    "DayslistId": parseInt($("#tdlDays").val()),
+                    "TimeSlotlistId": parseInt($("#tdlTimeSlot").val()),
+                };
+
+               
+                var urlToCall = $("#AddTimetableDetail").val();
+                if (parseInt($("#TTDetailIdQuick").val()) != "-1")
+                    urlToCall = $("#UpdateTimetableDetail").val();
+
+                $.ajax({
+                    url: urlToCall,
+                    type: "Post",
+                    dataType: "json",
+                    contentType: "application/json; charset=utf-8",
+                    headers: {
+                        RequestVerificationToken:
+                            $('input:hidden[name="__RequestVerificationToken"]').val()
+                    },
+                    data: JSON.stringify(TimetableDetailViewModel),
+                    cache: false,
+                    async: false,
+                    success: function (result) {
+                        var resultdata = JSON.parse(result);
+                            if (resultdata.Usermessage == 1) {
+
+                            form.classList.add('was-validated');
+                            showToolTip('Timetable Details Saved Successfully')
+                            $("#formid").removeAttr('class', 'was-validated');
+
+                            $("#TTDetailIdQuick").val(-1);
+                            if ($("#modeTTDetailQuick").val() == "quick") {
+                                $("#displayquick").load($("#TimetableList").val() + "?mode=detail&ctrlid=Id");
+                                event.preventDefault();
+                                event.stopPropagation();
+                                $('#RightSlidingWindow').removeAttr('class');
+                                $('#RightSlidingWindow').attr('class', 'ui-theme-settings');
+
+                            }
+                            else if ($("#modeTTDetailQuick").val() == "detail") {
+                                $("#myPartialViewContainer").load($("#TimetableList").val() + "?mode=detail&ctrlid=Id");
+                                event.preventDefault();
+                                event.stopPropagation();
+                                $('#RightSlidingWindow').removeAttr('class');
+                                $('#RightSlidingWindow').attr('class', 'ui-theme-settings');
+                            }
+                            else {
+                                $("#myPartialViewContainer").load($("#TimetableList").val() + "?mode=detail&ctrlid=Id");
+                                event.preventDefault();
+                                event.stopPropagation();
+                                $('#RightSlidingWindow').removeAttr('class');
+                                $('#RightSlidingWindow').attr('class', 'ui-theme-settings');
+                            }
+                        }
+                        else if(resultdata.Usermessage == "-9")
+                        {
+                            form.classList.add('was-validated');
+                            $("#formid").removeAttr('class', 'was-validated');
+                            showToolTip('Same Timetable Exists');
+                            event.preventDefault();
+                            event.stopPropagation();
+
+                        }
+
+                        else {
+                            form.classList.add('was-validated');
+                            $("#formid").removeAttr('class', 'was-validated');
+                            showToolTip('Timetable - API call from app to datacore failed');
+                            event.preventDefault();
+                            event.stopPropagation();
+                        }
+                    },
+                    fail: function (result) {
+
+                        form.classList.add('was-validated');
+                        $("#formid").removeAttr('class', 'was-validated');
+                        showToolTip('Timetable - API call from Client Side failed');
+                        event.preventDefault();
+                        event.stopPropagation();
+                    }
+                });
+            }
+        })
+    });
+</script>

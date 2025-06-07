@@ -1,0 +1,166 @@
+﻿@model AUEUMS.View_Models.AssignmentsForStudentsListViewModel
+
+
+@Html.Hidden("GetAssignmentsEdit", Url.Action("GetAssignmentsEdit", "Faculty"))
+@Html.Hidden("UpdateStudentEvaluation", Url.Action("UpdateStudentEvaluation", "Faculty"))
+
+@Html.Hidden("AssignmentsListmode", Model.mode)
+
+
+@Html.AntiForgeryToken()
+
+<div class="app-main__inner">
+    <div class="app-page-title">
+        <div class="page-title-wrapper">
+            <div class="page-title-heading">
+                <div class="page-title-icon">
+                    <i class="pe-7s-tools icon-gradient bg-warm-flame">
+                    </i>
+                </div>
+                <div>
+                    <label id="headernameClie">Student Evaluation</label>
+                    <div class="page-title-subheading">
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="main-card mb-3 card" style="width:100%">
+        <div class="card-body">
+            <div class="btn-group">
+               @*  <a id="btnNewAssignments" href="#">
+                    <i class="pe-7s-plus"></i>New
+                </a> *@
+            </div>
+
+            <div id="divAssignmentsdetails" class="table-responsive">
+                <table class="table table-bordered table-striped table-condensed display" id="StudentAssignmentDetails">
+                    <thead>
+                        <tr>
+                           
+                            <th style="width: 100px;">AssignmentTitle</th>
+                            <th style="width:100px;">Student Name</th>
+                            <th style="width: 100px;">Download</th>
+                            <th style="width: 100px;">Due Date</th>
+                            <th style="width:60px;">Posted Date</th>
+                            <th style="width:100px;">Student Uploads</th>
+                           
+                            <th style="width:80px;">Action</th>
+
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model.assignmentsForStudents)
+                        {
+                        <tr>
+                           
+                            <td>@item.mAssignmentTitle</td>
+                            <td>@item.UsrFullName</td>
+                                @if (@item.mAssignmentsFileName != "" && @item.mAssignmentsFileName != null)
+                            {
+                                    <td><a href="~/uploads/@item.mAssignmentsFileName" target="_blank">Assignment</a></td>
+                            }
+                            else
+                            {
+                                <td></td>
+                            }
+                           
+                            <td>@item.displaymDueDateTime</td>
+                            <td>@item.displaymPostedDateTime</td>
+                           
+
+                                @if (@item.mAssignmentsSubmitFileName != "" && @item.mAssignmentsSubmitFileName !=null)
+                                {
+                                    <td><a href="~/uploads/@item.mAssignmentsSubmitFileName" target="_blank">Answer Sheet</a></td>
+                                }
+                                else
+                                {
+                                    <td></td>
+                                }
+                           
+                                <td>
+                                    <a data="testpara=2&assignmentId=@item.mAssignmentId&studentId=@item.mStudentUsrId" data-toggle="modal" type="button" class="btngrid btnStudentEvaluation" style="cursor: pointer;padding-right: 18px;">
+                                        <i class="pe-7s-pen" style="color:blueviolet;font-size:medium;font-weight:bold;"></i> </a>
+                                 
+                                </td>
+
+                        </tr>
+
+                        }
+                    </tbody>
+                </table>
+            </div>
+           
+            <div class="position-relative form-group" hidden>
+                <button class="mb-2 mr-2 btn btn-light" type="button" id="tbnCancelSideBar">Cancel</button>
+            </div>
+           
+        </div>
+    </div>
+
+</div>
+
+<script>
+    $(document).ready(function () {
+        $.ajaxSetup({
+            beforeSend: function (xhr) {
+                xhr.setRequestHeader("RequestVerificationToken",
+                    $('input:hidden[name="__RequestVerificationToken"]').val());
+            },
+        });
+
+        $('#tbnCancelSideBar').on("click", function () {
+            $('#RightSlidingWindow').removeAttr('class');
+            $('#RightSlidingWindow').attr('class', 'ui-theme-settings');
+        });
+
+        $('#StudentAssignmentDetails').DataTable({
+            dom: "Bfrtip",
+            buttons: [
+            ]
+        });
+     
+        
+        $('#btnNewAssignments').on("click", function () {
+            var mode = $("#AssignmentsListmode").val();
+            $("#displayquick").load($("#NewAssignments").val() + "?mode=" + mode + "&AssignmentsId=-1");
+            $('#RightSlidingWindow').attr('class', 'ui-theme-settings settings-open');
+            event.preventDefault();
+            event.stopPropagation();
+        });
+
+
+
+        var UploadAssignmentObj;
+        var uriUploadClientsObj;
+        $('#StudentAssignmentDetails tbody').on('click', '.btnStudentEvaluation', function () {
+            
+                      
+            UploadAssignmentObj = $(this);  //for future use
+            uriUploadClientsObj = UploadAssignmentObj[0].attributes['1'].textContent;
+            uriUploadClientsObj = $(this).attr('data');
+            var assignmentId = getUrlParameter("assignmentId", uriUploadClientsObj); 
+            var studentId = getUrlParameter("studentId", uriUploadClientsObj);
+
+            $("#displayquick").load($("#UpdateStudentEvaluation").val() + "?mode=detail&AssignmentId=" + assignmentId+ "&StudentId=" + studentId);
+            $('#RightSlidingWindow').attr('class', 'ui-theme-settings settings-open');
+            event.preventDefault();
+            event.stopPropagation();
+
+
+        });
+
+
+    });
+
+    function getUrlParameter(name, uri) {
+        name = name.replace(/[\[]/, '\\[').replace(/[\]]/, '\\]');
+        var regex = new RegExp('[\\?&]' + name + '=([^&#]*)');
+        var results = regex.exec(uri);
+        return results === null ? '' : decodeURIComponent(results[1].replace(/\+/g, ' '));
+    }
+
+
+
+</script>

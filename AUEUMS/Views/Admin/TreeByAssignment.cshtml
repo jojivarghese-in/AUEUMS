@@ -1,0 +1,36 @@
+﻿@model AUEUMS.View_Models.AssignmentListDashboardViewModel
+@{
+    @Html.AntiForgeryToken()
+}
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+@addTagHelper *, AuthoringTagHelpers
+
+@if (Model != null)
+{
+    @foreach (var item in Model.assignmentListDashboard)
+    {
+        <div class="vertical-timeline-item vertical-timeline-element">
+
+            <span class="vertical-timeline-element-icon bounce-in">
+                <i style="color:crimson;font-size:small;font-weight:bold;">@item.DisplayAssignmentTitle</i>
+            </span>
+            <br />
+            <div class="vertical-timeline-element-content bounce-in">
+                
+
+                    <span>
+                        <i style="color:#3f6ad8;font-size:small;font-weight:bold;">
+                        <p>Staus : @item.displaymAssignmentsStatus</p>
+                        <p> Due Date : @item.displaymDueDateTime</p>
+                        <p> Submitted : @item.displaymPostedDateTime</p>
+                        </i>
+                    </span>
+
+                <span class="vertical-timeline-element-date"><i style="color:#074963;font-size:small;font-weight:bold;">Assignment</i></span>
+            </div>
+        </div>
+    }
+ }
+
+
+

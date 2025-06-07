@@ -1,0 +1,212 @@
+﻿@model AUEUMS.View_Models.AssignmentsViewModel
+@{
+    @Html.Hidden("AddAssignments", Url.Action("AddAssignments", "Faculty"))
+    @Html.Hidden("UpdateAssignments", Url.Action("UpdateAssignments", "Faculty"))
+    @Html.Hidden("AssignmentsIdQuick", Model.Id)
+    @Html.Hidden("modeAssignmentsQuick", Model.mode)
+    @Html.Hidden("modifiedDate", Model.ModifiedDate)
+
+    @Html.Hidden("AssignmentsList", Url.Action("AssignmentsAll", "Faculty"))
+
+    @Html.AntiForgeryToken()
+}
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+@addTagHelper *, AuthoringTagHelpers
+
+<div class="col-md-12">
+    <div class="main-card mb-12 card">
+        <div class="card-body" style="padding-bottom:20px;padding-top:20px;">
+            <h5 class="card-title"><label id="prjTitle">@Model.title</label></h5>
+            <form id="formid" class="needs-validation" novalidate>
+                <div class="form-row">
+                    <div class="col-md-12 mb-3 position-relative form-group">
+                    <label for="lblAssignmentTitle" class="">Assignment Title</label>
+                    <input asp-for="AssignmentTitle" name="txtAssignmentTitle" id="txtAssignmentTitle" placeholder="" type="text" class="form-control" required maxlength="150">
+
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="col-md-12 mb-3 position-relative form-group">
+                        <label for="lblAssignmentDescription" class="">Assignment Description</label>
+                        <textarea asp-for="AssignmentDescription" name="txtAssignmentDescription" id="txtAssignmentDescription" class="form-control" maxlength="500" rows="5" cols="5"></textarea>
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="col-md-6 mb-3 position-relative form-group">
+                            <label for="lblPostedDate" class="">Posted Date</label>
+                            <div class="input-group">
+                                <input asp-for="displayPostedDateTime" name="dtPostedDateTime" id="dtPostedDateTime" placeholder="" type="text" class="form-control" readonly="readonly" required>
+                                <div class="input-group-append">
+                                <a id="PostedDateTimeIcon" class="font-icon-wrapper font-icon-md">
+                                        <i class="fa fa-calendar icon-gradient bg-tempting-azure"> </i>
+                                    </a>
+                                </div>
+                            </div>
+                    </div>
+                   <div class="col-md-6 mb-3 position-relative form-group">
+                        <label for="lblDueDate" class="">Due Date</label>
+                        <div class="input-group">
+                            <input asp-for="displayDueDateTime" name="dtDueDateTime" id="dtDueDateTime" placeholder="" type="text" class="form-control" readonly="readonly" required>
+                            <div class="input-group-append">
+                                <a id="DueDateTimeDateIcon" class="font-icon-wrapper font-icon-md">
+                                    <i class="fa fa-calendar icon-gradient bg-tempting-azure"> </i>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="position-relative form-group">
+                    <button class="mt-1 btn btn-primary" id="tbnSubmit">Submit</button>
+                    <button class="mt-1 btn btn-light" type="button" id="tbnCancelSideBar">Cancel</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<script>
+
+    $(document).ready(function () {
+
+        $('#tbnCancelSideBar').on("click", function () {
+            $('#RightSlidingWindow').removeAttr('class');
+            $('#RightSlidingWindow').attr('class', 'ui-theme-settings');
+        });
+
+        $('.Numberformat').number(true, 2);
+        $('.wholeNumberformat').number(true, 0);
+
+
+        $("#dtPostedDateTime").datepicker({
+            dateFormat: 'dd/mm/yy', autoclose: true, todayBtn: 'linked', changeMonth: true,
+            changeYear: true
+        });
+        $('#PostedDateTimeIcon').click(function () {
+            if ($('#dtPostedDateTime').is(':disabled') == false) {
+                var minDateSel = new Date(moment().format("MM/DD/YYYY"));
+                $("#dtPostedDateTime").datepicker("option", "minDate", minDateSel);
+                $('#dtPostedDateTime').datepicker('show');
+            }
+        });
+
+     
+
+        $("#dtDueDateTime").datepicker({
+            dateFormat: 'dd/mm/yy', autoclose: true, todayBtn: 'linked', changeMonth: true,
+            changeYear: true
+        });
+        $('#DueDateTimeDateIcon').click(function () {
+            if ($('#dtDueDateTime').is(':disabled') == false) {
+                var minDateSel = new Date(moment().format("MM/DD/YYYY"));
+                $("#dtDueDateTime").datepicker("option", "minDate", minDateSel);
+                $('#dtDueDateTime').datepicker('show');
+            }
+        });
+
+
+
+
+
+    });
+    var forms = document.getElementsByClassName('needs-validation');
+  
+    var validation = Array.prototype.filter.call(forms, function (form) {
+        form.addEventListener('submit', function (event) {
+
+            if (form.checkValidity() === false) {
+                event.preventDefault();
+                event.stopPropagation();
+                //alert('Add Mandatory Fields');
+                showToolTip('Add Mandatory Fields')
+                form.classList.add('was-validated');
+            }
+            else {        
+         
+
+                var AssignmentsViewModel = {
+                    "Id": parseInt($("#AssignmentsIdQuick").val()),
+                    "AssignmentTitle": $("#txtAssignmentTitle").val(),
+                    "AssignmentDescription": $("#txtAssignmentDescription").val(),
+                    "PostedDateTimeString": (moment($("#dtPostedDateTime").val(), 'DD/MM/YYYY')).format('MM/DD/YYYY'),
+                    "DueDateTimeString": (moment($("#dtDueDateTime").val(), 'DD/MM/YYYY')).format('MM/DD/YYYY')
+
+                };
+                var urlToCall = $("#AddAssignments").val();
+                if (parseInt($("#AssignmentsIdQuick").val()) != "-1")
+                    urlToCall = $("#UpdateAssignments").val();
+
+                $.ajax({
+                    url: urlToCall,
+                    type: "Post",
+                    dataType: "json",
+                    contentType: "application/json; charset=utf-8",
+                    headers: {
+                        RequestVerificationToken:
+                            $('input:hidden[name="__RequestVerificationToken"]').val()
+                    },
+                    data: JSON.stringify(AssignmentsViewModel),
+                    cache: false,
+                    async: false,
+                    success: function (result) {
+                        var resultdata = JSON.parse(result);
+                        if (resultdata.Usermessage == 1) {
+
+                            form.classList.add('was-validated');
+                            showToolTip('Assignment Saved Successfully')
+                            $("#formid").removeAttr('class', 'was-validated');
+
+                            $("#AssignmentsIdQuick").val(-1);
+                            if ($("#modeAssignmentsQuick").val() == "quick") {
+                                $("#displayquick").load($("#AssignmentsList").val() + "?mode=detail&ctrlid=Id");
+                                event.preventDefault();
+                                event.stopPropagation();
+                                $('#RightSlidingWindow').removeAttr('class');
+                                $('#RightSlidingWindow').attr('class', 'ui-theme-settings');
+
+                            }
+                            else if ($("#modeAssignmentsQuick").val() == "detail") {
+                                $("#myPartialViewContainer").load($("#AssignmentsList").val() + "?mode=detail&ctrlid=Id");
+                                event.preventDefault();
+                                event.stopPropagation();
+                                $('#RightSlidingWindow').removeAttr('class');
+                                $('#RightSlidingWindow').attr('class', 'ui-theme-settings');
+                            }
+                            else {
+                                $("#myPartialViewContainer").load($("#AssignmentsList").val() + "?mode=detail&ctrlid=Id");
+                                event.preventDefault();
+                                event.stopPropagation();
+                                $('#RightSlidingWindow').removeAttr('class');
+                                $('#RightSlidingWindow').attr('class', 'ui-theme-settings');
+                            }
+                        }
+                      
+                        else if(resultdata.Usermessage == "-9")
+                        {
+                            form.classList.add('was-validated');
+                            $("#formid").removeAttr('class', 'was-validated');
+                            showToolTip('Due Date Should be greater than Posted Date');
+                            event.preventDefault();
+                            event.stopPropagation();
+
+                        }
+                        else {
+                            form.classList.add('was-validated');
+                            $("#formid").removeAttr('class', 'was-validated');
+                            showToolTip('Assignments - API call from app to datacore failed');
+                            event.preventDefault();
+                            event.stopPropagation();
+                        }
+                    },
+                    fail: function (result) {
+                        form.classList.add('was-validated');
+                        $("#formid").removeAttr('class', 'was-validated');
+                        showToolTip('Assignments - API call from Client Side failed');
+                        event.preventDefault();
+                        event.stopPropagation();
+                    }
+                });
+            }
+        })
+    });
+</script>

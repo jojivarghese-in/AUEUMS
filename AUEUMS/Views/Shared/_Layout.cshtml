@@ -1,0 +1,183 @@
+﻿<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta http-equiv="Content-Language" content="en">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>AUE - American University In The Emirates</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, shrink-to-fit=no" />
+    <meta name="description" content="AUE - American University In The Emirates">
+
+    <!-- Disable tap highlight on IE -->
+    <meta name="msapplication-tap-highlight" content="no">
+
+    <link href="~/css/main.87c0748b313a1dda75f5.css" rel="stylesheet">
+    <link rel="stylesheet" href="~/css/jquery.dataTables.min.css">
+    <link rel="stylesheet" href="/css/rowGroup.dataTables.min.css">
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/jquery-ui/jquery-ui.min.js"></script>
+    <link href="~/lib/jquery-ui/themes/ui-lightness/jquery-ui.css" rel="stylesheet" />
+    <link href="~/lib/jquery-ui/themes/ui-lightness/theme.css" rel="stylesheet" />
+    <script src="~/js/jquery.dataTables.min.js"></script>
+    <script src="/js/dataTables.rowGroup.min.js"></script>
+    <script src="~/js/jquery.number.js"></script>
+    <script src="~/js/dataTables.fixedHeader.min.js"></script>
+    <script src="~/js/dataTables.buttons.min.js"></script>
+    <script src="~/js/dataTables.select.min.js"></script>
+    <script src="~/js/dataTables.editor.min.js"></script>
+    <script src="~/js/buttons.flash.min.js"></script>
+    <script src="~/js/jszip.min.js"></script>
+    <script src="~/js/pdfmake.min.js"></script>
+    <script src="~/js/vfs_fonts.js"></script>
+    <script src="~/js/buttons.html5.min.js"></script>
+    <script src="~/js/buttons.print.min.js"></script>
+    <script src="~/js/moment.min.js"></script>
+    <script src="~/js/datetime-moment.js"></script>
+    <link href="~/css/bootstrap-multiselect.css" rel="stylesheet" />
+    <script src="~/js/bootstrap-multiselect.js"></script>
+    <script src="~/js/jquery.number.js"></script>
+    <link href="https://cdn.datatables.net/1.10.22/css/dataTables.bootstrap.min.css" />
+    <script type="text/javascript" src="~/scripts/main.87c0748b313a1dda75f5.js"></script>
+    <link href="~/css/toast.css" rel="stylesheet" />
+    <script src="~/scripts/toastr.js"></script>
+
+    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/pivottable/2.23.0/pivot.min.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/pivottable/2.23.0/tips_data.min.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/pivottable/2.22.0/plotly_renderers.min.js"></script>
+    <script type="text/javascript" src="https://cdn.plot.ly/plotly-basic-latest.min.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui-touch-punch/0.2.3/jquery.ui.touch-punch.min.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/pivottable/2.23.0/export_renderers.min.js"></script>
+
+</head>
+<body style="color:black">
+    <div class="app-container app-theme-white body-tabs-shadow fixed-header fixed-sidebar">
+        <div class="app-header header-shadow bg-night-sky header-text-light">
+            <div class="app-header__logo one" style="cursor: pointer;">
+                <div class="logo-src"></div>
+               
+            </div>
+        
+            @Html.Partial("Navigation1")
+        </div>
+        <button type="button" id="TooltipDemo" class="show-toastr-example">
+         
+        </button>
+        <div id="RightSlidingWindow" class="ui-theme-settings">
+
+            <div class="theme-settings__inner">
+                <div class="scrollbar-container">
+                    <div class="theme-settings__options-wrapper">
+                   
+                        <div id="displayquick"></div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="app-main">
+
+            @*<div class="app-sidebar sidebar-shadow bg-tempting-azure sidebar-text-dark">
+                <div class="app-header__logo">
+                    <div class="logo-src"></div>
+                    <div class="header__pane ml-auto">
+                        <div>
+                            <button type="button" class="hamburger close-sidebar-btn hamburger--elastic" data-class="closed-sidebar">
+                                <span class="hamburger-box">
+                                    <span class="hamburger-inner"></span>
+                                </span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                <div class="app-header__mobile-menu">
+                    <div>
+                        <button type="button" class="hamburger hamburger--elastic mobile-toggle-nav">
+                            <span class="hamburger-box">
+                                <span class="hamburger-inner"></span>
+                            </span>
+                        </button>
+                    </div>
+                </div>
+                <div class="app-header__menu">
+                    <span>
+                        <button type="button" class="btn-icon btn-icon-only btn btn-primary btn-sm mobile-toggle-header-nav">
+                            <span class="btn-icon-wrapper">
+                                <i class="fa fa-ellipsis-v fa-w-6"></i>
+                            </span>
+                        </button>
+                    </span>
+                </div>
+                @Html.Partial("Navigation")
+            </div>*@
+            <div class="app-main__outer">
+                <div id="myPartialViewContainer">
+                    <!-- Content Header (Page header) -->
+                    @RenderBody()
+                    <!-- /.content -->
+                </div>
+                <br /><br />
+
+                <div class="app-wrapper-footer" style="clear: both; position: absolute; bottom: 0; width:100%;">
+                    <div class="app-footer">
+                        <div class="app-footer__inner">
+                            <div class="app-footer-left">
+                                
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+ 
+    @RenderSection("scripts", required: false)
+</body>
+</html>
+
+<script>
+    $(document).ready(function () {
+
+        $('.one').click(function () {
+            $("#myPartialViewContainer").load($("#loadDashboard").val() + "?mode=detail&ctrlid=UserId&src=loadDashboard");
+            $("#displayquick").load($("#DefaultQuick").val());
+            $('#RightSlidingWindow').attr('class', 'ui-theme-settings');
+            
+        });
+
+    });
+
+     document.onkeydown = function (evt) {
+        evt = evt || window.event;
+        if (evt.keyCode == 27) {
+            hideSideBar();
+        }
+    };
+
+
+
+    function showToolTip(msg) {
+        toastr.options = {
+            closeButton: !0, debug: !1, newestOnTop: !0, progressBar: 0, positionClass: "toast-bottom-center",
+            preventDuplicates: !1, onclick: null, showDuration: "300", hideDuration: "1000", timeOut: "5000", extendedTimeOut: "1000",
+            showEasing: "swing", hideEasing: "linear", showMethod: "fadeIn", hideMethod: "fadeOut"
+        };
+        toastr.info(msg);
+    }
+
+    function hideSideBar() {
+          $("#displayquick").load($("#DefaultQuick").val());
+          $('#RightSlidingWindow').removeAttr('class');
+          $('#RightSlidingWindow').attr('class', 'ui-theme-settings');
+    }
+    function showSideBar() {
+         $('#RightSlidingWindow').attr('class', 'ui-theme-settings settings-open');
+    }
+
+  
+ 
+</script>

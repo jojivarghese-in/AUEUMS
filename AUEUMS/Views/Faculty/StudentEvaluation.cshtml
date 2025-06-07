@@ -1,0 +1,177 @@
+﻿@model AUEUMS.View_Models.AssignmentsForStudentsViewModel
+@{
+   
+    @Html.Hidden("UpdateEvaluation", Url.Action("UpdateEvaluation", "Faculty"))
+    @Html.Hidden("AssignmentsList", Url.Action("AssignmentsAll", "Faculty"))
+
+    @Html.AntiForgeryToken()
+}
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+@addTagHelper *, AuthoringTagHelpers
+
+<div class="col-md-12">
+    <div class="main-card mb-12 card">
+        <div class="card-body" style="padding-bottom:20px;padding-top:20px;">
+            <h5 class="card-title"><label id="prjTitle">@Model.title</label></h5>
+            <form id="formid" class="needs-validation" novalidate>
+                <div class="form-row">
+                    <div class="col-md-12 mb-3 position-relative form-group">
+                    <label for="lblAssignmentTitle" class="">Assignment Title</label>
+                        <input asp-for="mAssignmentTitle" name="txtAssignmentTitle" id="txtAssignmentTitle" placeholder="" type="text" class="form-control" maxlength="150" readonly>
+
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="col-md-12 mb-3 position-relative form-group">
+                        <label for="lblAssignmentDescription" class="">Assignment Description</label>
+                        <textarea asp-for="mAssignmentDescription" name="txtAssignmentDescription" id="txtAssignmentDescription" class="form-control" maxlength="500" rows="4" cols="5" readonly></textarea>
+                    </div>
+                </div>
+         
+
+                <div class="form-row">
+                    <div class="col-md-6 mb-3 position-relative form-group">
+                        <label for="lblGradingCriteria" class="">Grading Criteria</label>
+                        <select asp-for="mGradingCriteria" name="SelCriteria" id="SelCriteria" class="form-control"
+                                asp-items="@(new SelectList(Model.SelGradingCriteria,"DisplayID", "DisplayValue"))" required>
+                            <option value="">Select</option>
+                        </select>
+                    </div>
+                    <div class="col-md-6 mb-3 position-relative form-group">
+                        <label for="lblScoreRange" class="">Score Range</label>
+                        <select asp-for="mScoreRange" name="SelScore" id="SelScore" class="form-control"
+                                asp-items="@(new SelectList(Model.SelScorerange,"DisplayID", "DisplayValue"))" required>
+                            <option value="">Select</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="col-md-12 mb-3 position-relative form-group">
+                        <label for="lblmRemarks" class="">Evaluation Remark</label>
+                        <textarea asp-for="mRemarks" name="txtRemarks" id="txtRemarks" class="form-control" maxlength="500" rows="4" cols="5" ></textarea>
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <input type="hidden" asp-for="pAssignmentsId" class="form-control" value="@Model.pAssignmentsId" id="txthdnAssignmentsId" />
+                    <input type="hidden" asp-for="pStudentId" class="form-control" value="@Model.pStudentId" id="txthdnpStudentId" />
+                 </div>
+
+                <div class="position-relative form-group">
+                    <button class="mt-1 btn btn-primary" id="tbnSubmit">Submit</button>
+                    <button class="mt-1 btn btn-light" type="button" id="tbnCancelSideBar">Cancel</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<script>
+
+    $(document).ready(function () {
+
+        $('#tbnCancelSideBar').on("click", function () {
+            $('#RightSlidingWindow').removeAttr('class');
+            $('#RightSlidingWindow').attr('class', 'ui-theme-settings');
+        });
+
+        $('.Numberformat').number(true, 2);
+        $('.wholeNumberformat').number(true, 0);
+
+
+
+    });
+    var forms = document.getElementsByClassName('needs-validation');
+  
+    var validation = Array.prototype.filter.call(forms, function (form) {
+        form.addEventListener('submit', function (event) {
+
+            if (form.checkValidity() === false) {
+                event.preventDefault();
+                event.stopPropagation();
+                //alert('Add Mandatory Fields');
+                showToolTip('Add Mandatory Fields')
+                form.classList.add('was-validated');
+            }
+            else {        
+         
+
+                var AssignmentsForStudentsViewModel = {
+                    "mStudentUsrId": parseInt($("#txthdnpStudentId").val()),
+                    "mAssignmentId":parseInt($("#txthdnAssignmentsId").val()),
+                    "mAssignmentTitle": $("#txtAssignmentTitle").val(),
+                    "mAssignmentDescription": $("#txtAssignmentDescription").val(),
+                    "mGradingCriteria":$("#SelCriteria option:selected").text(),
+                    "mScoreRange": parseInt($("#SelScore").val()),
+                    "mRemarks":$("#txtRemarks").val(),
+         
+
+                };
+               
+                var urlToCall = $("#UpdateEvaluation").val();
+
+                $.ajax({
+                    url: urlToCall,
+                    type: "Post",
+                    dataType: "json",
+                    contentType: "application/json; charset=utf-8",
+                    headers: {
+                        RequestVerificationToken:
+                            $('input:hidden[name="__RequestVerificationToken"]').val()
+                    },
+                    data: JSON.stringify(AssignmentsForStudentsViewModel),
+                    cache: false,
+                    async: false,
+                    success: function (result) {
+                        var resultdata = JSON.parse(result);
+                        if (resultdata.Usermessage == 1) {
+
+                            form.classList.add('was-validated');
+                            showToolTip('Evaluation Saved Successfully')
+                            $("#formid").removeAttr('class', 'was-validated');
+
+                            $("#AssignmentsIdQuick").val(-1);
+                            if ($("#modeAssignmentsQuick").val() == "quick") {
+                                $("#displayquick").load($("#AssignmentsList").val() + "?mode=detail&ctrlid=Id");
+                                event.preventDefault();
+                                event.stopPropagation();
+                                $('#RightSlidingWindow').removeAttr('class');
+                                $('#RightSlidingWindow').attr('class', 'ui-theme-settings');
+
+                            }
+                            else if ($("#modeAssignmentsQuick").val() == "detail") {
+                                $("#myPartialViewContainer").load($("#AssignmentsList").val() + "?mode=detail&ctrlid=Id");
+                                event.preventDefault();
+                                event.stopPropagation();
+                                $('#RightSlidingWindow').removeAttr('class');
+                                $('#RightSlidingWindow').attr('class', 'ui-theme-settings');
+                            }
+                            else {
+                                $("#myPartialViewContainer").load($("#AssignmentsList").val() + "?mode=detail&ctrlid=Id");
+                                event.preventDefault();
+                                event.stopPropagation();
+                                $('#RightSlidingWindow').removeAttr('class');
+                                $('#RightSlidingWindow').attr('class', 'ui-theme-settings');
+                            }
+                        }
+                        
+                        else {
+                            form.classList.add('was-validated');
+                            $("#formid").removeAttr('class', 'was-validated');
+                            showToolTip('Assignments - API call from app to datacore failed');
+                            event.preventDefault();
+                            event.stopPropagation();
+                        }
+                    },
+                    fail: function (result) {
+                        form.classList.add('was-validated');
+                        $("#formid").removeAttr('class', 'was-validated');
+                        showToolTip('Assignments - API call from Client Side failed');
+                        event.preventDefault();
+                        event.stopPropagation();
+                    }
+                });
+            }
+        })
+    });
+</script>

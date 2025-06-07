@@ -1,0 +1,84 @@
+﻿@model AUEUMS.View_Models.AssignmentsForStudentsViewModel
+@{
+
+    @Html.AntiForgeryToken()
+}
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+@addTagHelper *, AuthoringTagHelpers
+
+<div class="col-md-12">
+    <div class="main-card mb-12 card">
+        <div class="card-body" style="padding-bottom:20px;padding-top:20px;">
+            <h5 class="card-title"><label id="prjTitle">@Model.title</label></h5>
+            <form id="formid" class="needs-validation" novalidate>
+                <div class="form-row">
+                    <div class="col-md-12 mb-3 position-relative form-group">
+                    <label for="lblAssignmentTitle" class="">Assignment Title</label>
+                        <input asp-for="mAssignmentTitle" name="txtAssignmentTitle" id="txtAssignmentTitle" placeholder="" type="text" class="form-control" maxlength="150" readonly>
+
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="col-md-12 mb-3 position-relative form-group">
+                        <label for="lblAssignmentDescription" class="">Assignment Description</label>
+                        <textarea asp-for="mAssignmentDescription" name="txtAssignmentDescription" id="txtAssignmentDescription" class="form-control" maxlength="500" rows="4" cols="5" readonly></textarea>
+                    </div>
+                </div>
+         
+
+                <div class="form-row">
+                    <div class="col-md-6 mb-3 position-relative form-group">
+                        <label for="lblGradingCriteria" class="">Grading Criteria</label>
+                        <select asp-for="mGradingCriteria" name="SelCriteria" id="SelCriteria" class="form-control"
+                                asp-items="@(new SelectList(Model.SelGradingCriteria,"DisplayID", "DisplayValue",Model.mGradingCriteria))" readonly required>
+                            <option value="">Select</option>
+                        </select>
+                    </div>
+                    <div class="col-md-6 mb-3 position-relative form-group">
+                        <label for="lblScoreRange" class="">Score Range</label>
+                        <select asp-for="mScoreRange" name="SelScore" id="SelScore" class="form-control"
+                                asp-items="@(new SelectList(Model.SelScorerange,"DisplayID", "DisplayValue",Model.mGradingCriteria))" readonly required>
+                            <option value="">Select</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="col-md-12 mb-3 position-relative form-group">
+                        <label for="lblmRemarks" class="">Evaluation Remark</label>
+                        <textarea asp-for="mRemarks" name="txtRemarks" id="txtRemarks" class="form-control" maxlength="500" rows="4" cols="5" readonly></textarea>
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <input type="hidden" asp-for="pAssignmentsId" class="form-control" value="@Model.pAssignmentsId" id="txthdnAssignmentsId" />
+                    <input type="hidden" asp-for="pStudentId" class="form-control" value="@Model.pStudentId" id="txthdnpStudentId" />
+                 </div>
+
+                <div class="position-relative form-group">
+                  
+                    <button class="mt-1 btn btn-light" type="button" id="tbnCancelSideBar">Cancel</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<script>
+
+    $(document).ready(function () {
+
+        $('#tbnCancelSideBar').on("click", function () {
+            $('#RightSlidingWindow').removeAttr('class');
+            $('#RightSlidingWindow').attr('class', 'ui-theme-settings');
+        });
+
+        $('.Numberformat').number(true, 2);
+        $('.wholeNumberformat').number(true, 0);
+
+
+
+    });
+    var forms = document.getElementsByClassName('needs-validation');
+  
+    
+</script>

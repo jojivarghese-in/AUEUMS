@@ -1,0 +1,206 @@
+﻿@model AUEUMS.View_Models.AssignmentsListViewModel
+@Html.Hidden("NewAssignments", Url.Action("NewAssignments", "Faculty"))
+@Html.Hidden("GetAssignmentsEdit", Url.Action("GetAssignmentsEdit", "Faculty"))
+@Html.Hidden("UploadAssignment", Url.Action("UploadAssignment", "Faculty"))
+@Html.Hidden("DownloadFile", Url.Action("DownloadFile", "Faculty"))
+@Html.Hidden("AssignmentsListmode", Model.mode)
+
+
+@Html.AntiForgeryToken()
+
+<div class="app-main__inner">
+    <div class="app-page-title">
+        <div class="page-title-wrapper">
+            <div class="page-title-heading">
+                <div class="page-title-icon">
+                    <i class="pe-7s-tools icon-gradient bg-warm-flame">
+                    </i>
+                </div>
+                <div>
+                    <label id="headernameClie">Assignments List</label>
+                    <div class="page-title-subheading">
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="main-card mb-3 card" style="width:100%">
+        <div class="card-body">
+            <div class="btn-group">
+                <a id="btnNewAssignments" href="#">
+                    <i class="pe-7s-plus" style="color:#3f6ad8;font-weight:bold"></i>New
+                </a>
+            </div>
+
+            <div id="divAssignmentsdetails" class="table-responsive">
+                <table class="table table-bordered table-striped table-condensed display" id="AssignmentDetails">
+                    <thead>
+                        <tr>
+                            
+                            <th style="width: 100px;">AssignmentTitle</th>
+                            <th style="width: 100px;">Due Date</th>
+                            <th style="width:60px;">Posted Date</th>
+                            <th style="width:60px;">Download</th>
+                            <th style="width:80px;">Action</th>
+
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model.assignments)
+                        {
+                            <tr>
+                               
+                                <td>@item.AssignmentTitle</td>
+                                <td>@item.displayDueDateTime</td>
+                                <td>@item.displayPostedDateTime</td>
+                                @if (@item.UploadFileName != "" && @item.UploadFileName !=null)
+                                {
+                                    <td><a href="~/uploads/@item.UploadFileName" target="_blank">Assignment</a></td>
+                                }
+                                else
+                                {
+                                    <td></td>
+                                }
+
+                            <td>
+                               <div class="tooltipSlideLeft">
+                                <a data="testpara=2&assignmentId=@item.Id" data-toggle="modal" type="button" class="btngrid btnEditAssignment" style="cursor: pointer;padding-right: 18px;">
+                                    <i class="pe-7s-pen" style="color:blueviolet;font-size:medium;font-weight:bold;"></i>
+                                </a>
+                                    <span class="tooltiptextSlideLeft">
+                                        Edit
+                                    </span>
+                                    </div>
+                                <div class="tooltipSlideLeft">
+                                <a data="testpara=2&assignmentId=@item.Id" data-toggle="modal" type="button" class="btngrid btnUploadAssignment" style="cursor: pointer;padding-right: 18px;">
+                                        <i class="pe-7s-cloud-upload" style="color:#e83e8c;font-size:medium;font-weight:bold;"></i>
+                                </a>
+                                <span class="tooltiptextSlideLeft">
+                                    View
+                                </span>
+                                </div>
+                               
+                            </td>
+
+
+                        </tr>
+
+                        }
+                    </tbody>
+                </table>
+            </div>
+           
+            <div class="position-relative form-group" hidden>
+                <button class="mb-2 mr-2 btn btn-light" type="button" id="tbnCancelSideBar">Cancel</button>
+            </div>
+           
+        </div>
+    </div>
+
+</div>
+
+<script>
+    $(document).ready(function () {
+        $.ajaxSetup({
+            beforeSend: function (xhr) {
+                xhr.setRequestHeader("RequestVerificationToken",
+                    $('input:hidden[name="__RequestVerificationToken"]').val());
+            },
+        });
+
+        $('#tbnCancelSideBar').on("click", function () {
+            $('#RightSlidingWindow').removeAttr('class');
+            $('#RightSlidingWindow').attr('class', 'ui-theme-settings');
+        });
+
+        $('#AssignmentDetails').DataTable({
+            dom: "Bfrtip",
+            buttons: [
+            ]
+        });
+     
+        
+        $('#btnNewAssignments').on("click", function () {
+            var mode = $("#AssignmentsListmode").val();
+            $("#displayquick").load($("#NewAssignments").val() + "?mode=" + mode + "&AssignmentsId=-1");
+            $('#RightSlidingWindow').attr('class', 'ui-theme-settings settings-open');
+            event.preventDefault();
+            event.stopPropagation();
+        });
+
+
+        var EditAssignmentObj;
+        var uriEditClientsObj;
+        $('#AssignmentDetails tbody').on('click', '.btnEditAssignment', function () {
+
+            var mode = $("#AssignmentsListmode").val();
+            EditAssignmentObj = $(this);  //for future use
+            uriEditClientsObj = EditAssignmentObj[0].attributes['1'].textContent;
+            uriEditClientsObj = $(this).attr('data');
+            var assignmentId = getUrlParameter("assignmentId", uriEditClientsObj);
+            
+            $("#displayquick").load($("#GetAssignmentsEdit").val() + "?mode=" + mode + "&AssignmentId=" + assignmentId);
+            $('#RightSlidingWindow').attr('class', 'ui-theme-settings settings-open');
+       
+
+        });
+
+        var UploadAssignmentObj;
+        var uriUploadClientsObj;
+        $('#AssignmentDetails tbody').on('click', '.btnUploadAssignment', function () {
+
+            
+            var mode = $("#AssignmentsListmode").val();
+            UploadAssignmentObj = $(this);  //for future use
+            uriUploadClientsObj = UploadAssignmentObj[0].attributes['1'].textContent;
+            uriUploadClientsObj = $(this).attr('data');
+            var assignmentId = getUrlParameter("assignmentId", uriUploadClientsObj);            
+            $("#displayquick").load($("#UploadAssignment").val() + "?mode=" + mode + "&AssignmentId=" + assignmentId);
+            $('#RightSlidingWindow').attr('class', 'ui-theme-settings settings-open');
+            event.preventDefault();
+            event.stopPropagation();
+
+
+        });
+
+
+
+    });
+
+    function getUrlParameter(name, uri) {
+        name = name.replace(/[\[]/, '\\[').replace(/[\]]/, '\\]');
+        var regex = new RegExp('[\\?&]' + name + '=([^&#]*)');
+        var results = regex.exec(uri);
+        return results === null ? '' : decodeURIComponent(results[1].replace(/\+/g, ' '));
+    }
+
+
+</script>
+<style>
+    .tooltipSlideLeft {
+        position: relative;
+        display: inline-block;
+    }
+
+        .tooltipSlideLeft .tooltiptextSlideLeft {
+            visibility: hidden;
+            width: 80px;
+            background-color: #6495ed;
+            border: 2px #fff solid;
+            color: #fff;
+            text-align: center;
+            border-radius: 6px;
+            padding: 5px 0;
+            /* Position the tooltip */
+            position: absolute;
+            z-index: 1;
+            top: -40px;
+            left: 3%;
+        }
+
+        .tooltipSlideLeft:hover .tooltiptextSlideLeft {
+            visibility: visible;
+        }
+
+</style>

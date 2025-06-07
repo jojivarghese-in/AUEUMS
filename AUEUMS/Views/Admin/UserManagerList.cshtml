@@ -1,0 +1,343 @@
+﻿@model AUEUMS.View_Models.AUEUMSRegisterListViewModel
+
+@Html.Hidden("ActivateDeactivateAUEUMSRegister", Url.Action("ActivateDeactivateAUEUMSRegister", "Admin"))
+
+@Html.Hidden("GetUserForApproval", Url.Action("GetUserForApproval", "Admin"))
+
+@Html.Hidden("RefreshAUEUMSRegister", Url.Action("RefreshAUEUMSRegister", "Admin"))
+@Html.Hidden("UserListmode", Model.mode)
+@Html.Hidden("NewAUEUMSRegisterSrc", Model.src)
+
+@Html.Hidden("AUEUMSRegisterAll", Url.Action("AUEUMSRegisterAll", "Admin"))
+
+@Html.Hidden("ViewAUEUMSUsersPartial", Url.Action("getAUEUMSUserListPartialViewForContainer", "Admin"))
+
+@Html.Hidden("GetAUEUMSRegister", Url.Action("GetAUEUMSRegister", "Admin"))
+@Html.Hidden("NewAUEUMSRegister", Url.Action("NewAUEUMSRegister", "Admin"))
+
+@Html.AntiForgeryToken()
+
+<div class="app-main__inner">
+    <div class="app-page-title">
+        <div class="page-title-wrapper">
+            <div class="page-title-heading">
+                <div class="page-title-icon">
+                    <i class="pe-7s-tools icon-gradient bg-warm-flame">
+                    </i>
+                </div>
+                <div>
+                    <label id="headernameClie">User List</label>
+                    <div class="page-title-subheading">
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="main-card mb-3 card" style="width:100%">
+        <div class="card-body">
+            <div class="btn-group">
+                <a id="btnshowAddAUEUMSUsers" href="#">
+                    <i class="pe-7s-plus mb-3" style="color:#3f6ad8;font-weight:bold"></i>New
+                </a>
+            </div>
+            <div />
+
+            <div id="usrdetails" class="table-responsive">
+                <table class="table table-bordered table-striped table-condensed display" id="AUEUMSUsersDetails">
+                    <thead>
+                        <tr>
+
+                            <th style="width: 100px;">User ID</th>
+                            <th style="width: 100px;">User Name</th>
+                            <th style="width: 100px;">Email</th>
+                            <th style="width: 100px;">Designation</th>
+                          
+                            <th style="width:80px;">Action</th>
+
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @if(Model.registers!=null)
+                        {
+                            @foreach (var item in Model.registers)
+                            {
+                                <tr>
+                                    <td>@item.Id</td>
+                                    <td>@item.UserNameDisplay</td>
+                                    <td>@item.Email</td>
+                                    <td>@item.UsrInfo.Designation</td>
+                                    <td>
+
+                                        <div class="tooltipSlideLeft">
+                                        <a data="testpara=2&UsrId=@item.Id" data-toggle="modal" type="button" class="btngrid btnEditUserInfo" style="cursor: pointer;padding-right: 18px;">
+                                            <i class="pe-7s-pen" style="color:blueviolet;font-size:medium;font-weight:bold;"></i>
+                                        </a>
+                                            <span class="tooltiptextSlideLeft">
+                                                Edit
+                                            </span>
+                                        </div>
+                                        <div class="tooltipSlideLeft">
+                                        <a data="testpara=2&UsrId=@item.Id&DeActivated=@item.InactiveDisplay" data-toggle="modal" type="button" class="btngrid btnDeactivateContact" style="cursor: pointer;padding-right: 18px;">
+                                        <i class="pe-7s-junk" style="color:crimson;font-size:medium;font-weight:bold;"></i>
+                                        </a>
+                                            <span class="tooltiptextSlideLeft">
+                                                DeActivate
+                                            </span>
+                                        </div>
+                                    </td>
+
+
+                                </tr>
+
+                            }
+                        }
+                    </tbody>
+                </table>
+            </div>
+
+
+            </div>
+         
+            <div class="position-relative form-group" hidden>
+                <button class="mb-2 mr-2 btn btn-light" type="button" id="tbnCancelSideBar">Cancel</button>
+            </div>
+         
+        </div>
+    </div>
+
+</div>
+<style type="text/css">
+
+    .tooltipSlideLeft {
+        position: relative;
+        display: inline-block;
+    }
+
+        .tooltipSlideLeft .tooltiptextSlideLeft {
+            visibility: hidden;
+            width: 80px;
+            background-color: #6495ed;
+            border: 2px #fff solid;
+            color: #fff;
+            text-align: center;
+            border-radius: 6px;
+            padding: 5px 0;
+            /* Position the tooltip */
+            position: absolute;
+            z-index: 1;
+            top: -40px;
+            left: 3%;
+        }
+
+        .tooltipSlideLeft:hover .tooltiptextSlideLeft {
+            visibility: visible;
+        }
+</style>
+<script>
+    $(document).ready(function () {
+        $.ajaxSetup({
+            beforeSend: function (xhr) {
+                xhr.setRequestHeader("RequestVerificationToken",
+                    $('input:hidden[name="__RequestVerificationToken"]').val());
+            },
+        });
+
+
+        document.onkeydown = function (evt) {
+            evt = evt || window.event;
+            if (evt.keyCode == 27) {
+
+                $('#RightSlidingWindow').removeAttr('class');
+                $('#RightSlidingWindow').attr('class', 'ui-theme-settings');
+            }
+        };
+
+        $('#tbnCancelSideBar').on("click", function () {
+            $('#RightSlidingWindow').removeAttr('class');
+            $('#RightSlidingWindow').attr('class', 'ui-theme-settings');
+        });
+
+        
+        $.fn.dataTable.moment('DD/MM/YYYY');
+        var table = $('#AUEUMSUsersDetails').DataTable({
+            responsive: false,
+            "bProcessing": true,
+            orderCellsTop: true,
+            fixedHeader: false,
+            order: [[0, 'desc']],
+            lengthMenu: [
+                [25, 50, -1],
+                ['25', '50', 'all']
+            ],
+
+            columnDefs: [{
+                targets: [0, 1],
+                orderable: false
+            }],
+            "dom": '<"top"Bfl>iprt<"bottom">p<"clear">',
+            stateSave: true,
+            buttons: [
+                {
+                    extend: 'excel',
+                    className: 'btn btn-outline-secondary',
+                    exportOptions: {
+                        columns: [1, 2, 3]
+                    }
+                }
+            ]
+        });
+
+
+        $('#btnshowAddAUEUMSUsers').on("click", function () {
+
+            var mode = $("#UserListmode").val();
+            $("#displayquick").load($("#NewAUEUMSRegister").val() + "?mode=" + mode + "&AUEUMSRegisterID=-1");
+            $('#RightSlidingWindow').attr('class', 'ui-theme-settings settings-open');
+            event.preventDefault();
+            event.stopPropagation();
+        });
+
+
+        var EditAUEUMSUsersObj;
+        var uriAUEUMSUsersClientsObj;
+        $('#AUEUMSUsersDetails tbody').on('click', '.btnEditUserInfo', function () {
+
+
+            var mode = $("#UserListmode").val();
+            EditAUEUMSUsersObj = $(this); 
+            uriAUEUMSUsersClientsObj = EditAUEUMSUsersObj[0].attributes['1'].textContent;
+            uriAUEUMSUsersClientsObj = $(this).attr('data');
+            var registerID = getUrlParameter("UsrId", uriAUEUMSUsersClientsObj);
+            $("#displayquick").load($("#GetAUEUMSRegister").val() + "?mode=" + mode + "&Id=" + registerID);
+            $('#RightSlidingWindow').attr('class', 'ui-theme-settings settings-open');
+            event.preventDefault();
+            event.stopPropagation();
+        });
+
+
+        var DeleteUserObj;
+        var uriDeleteClientsObj;
+        $('#AUEUMSUsersDetails tbody').on('click', '.btnDeactivateUsers', function () {
+
+
+            DeleteUserObj = $(this);  //for future use
+            uriDeleteClientsObj = DeleteUserObj[0].attributes['1'].textContent;
+            uriDeleteClientsObj = $(this).attr('data');
+            var AUEUMSRegisterID = getUrlParameter("Id", uriDeleteClientsObj);
+            var usrId = getUrlParameter("UsrId", uriDeleteClientsObj);
+
+            var DeActivated = getUrlParameter("DeActivated", uriDeleteClientsObj);
+            var deActivatedFlag = false;
+            if (DeActivated != "" || DeActivated != null) {
+                deActivatedFlag = DeActivated
+            }
+            else {
+                deActivatedFlag = "";
+            }
+
+            var AUEUMSRegisterViewModel = {
+                "Id": parseInt(AUEUMSRegisterID),
+                "InactiveDisplayFlag": deActivatedFlag,
+                "UsrId": usrId,
+
+            };
+            $.ajax({
+                url: $("#ActivateDeactivateAUEUMSRegister").val(),
+                type: "Post",
+                dataType: "json",
+                contentType: "application/json; charset=utf-8",
+                headers: {
+                    RequestVerificationToken:
+                        $('input:hidden[name="__RequestVerificationToken"]').val()
+                },
+                data: JSON.stringify(AUEUMSRegisterViewModel),
+                cache: false,
+                success: function (result) {
+
+                    var resultdata = JSON.parse(result);
+                    if (resultdata.Usermessage == 1) {
+
+
+                        var mode = $("#UserListmode").val();
+                        if (mode != "detail") {
+                            $("#myPartialViewContainer").load($("#AUEUMSRegisterAll").val() + "?mode=detail&ctrlid=ctrlId");
+                        }
+                        else {
+
+                            $("#myPartialViewContainer").load($("#AUEUMSRegisterAll").val() + "?mode=detail&ctrlid=ctrlId");
+                        }
+                        showToolTip('Design Plus 2.0 User updated successfully');
+                        $('#DeleteClientpopup').removeAttr('class');
+                        $('#DeleteClientpopup').attr('class', 'modal fade');
+                        $('#DeleteClientpopup').removeAttr('style');
+                        $('#DeleteClientpopup').removeAttr('aria-hidden');
+                        $('#DeleteClientpopup').attr('area-modal', 'false');
+                        $("#clientdeletionmsg").text('');
+                        $("#hclientDId").val('');
+                    }
+              
+                    else if (resultdata.Usermessage == -2) {
+                        showToolTip('Data Core Exception');
+                    }
+                    else if (resultdata.Usermessage == -4) {
+                        showToolTip('Model data invalid, cannot mapp models');
+                    }
+                    else {
+                        showToolTip('API call error');
+                    }
+                },
+                fail: function (response) {
+                    alert("JSON Error, Saving Selection - Please see System Adimistrator");
+                }
+            });
+
+
+        });
+
+
+        $('#btnCloseDeleteClient').on("click", function () {
+            $('#DeleteClientpopup').removeAttr('class');
+            $('#DeleteClientpopup').attr('class', 'modal fade');
+            $('#DeleteClientpopup').removeAttr('style');
+            $('#DeleteClientpopup').removeAttr('aria-hidden');
+            $('#DeleteClientpopup').attr('area-modal', 'false');
+            $("#clientdeletionmsg").text('');
+            $("#hclientDId").val('');
+
+        });
+
+
+    });
+
+    function getUrlParameter(name, uri) {
+        name = name.replace(/[\[]/, '\\[').replace(/[\]]/, '\\]');
+        var regex = new RegExp('[\\?&]' + name + '=([^&#]*)');
+        var results = regex.exec(uri);
+        return results === null ? '' : decodeURIComponent(results[1].replace(/\+/g, ' '));
+    }
+
+
+
+    function AUEUMSRegistersList() {
+        $.ajax({
+            url: $("#GetAUEUMSRegister").val(),
+            type: "Get",
+            dataType: "json",
+            contentType: "application/json; charset=utf-8",
+            headers: {
+                RequestVerificationToken:
+                    $('input:hidden[name="__RequestVerificationToken"]').val()
+            },
+            cache: false,
+            success: function (result) {
+
+
+
+            },
+            fail: function (response) {
+                alert("JSON Error, Saving Selection - Please see System Adimistrator");
+            }
+        });
+    }
+</script>
