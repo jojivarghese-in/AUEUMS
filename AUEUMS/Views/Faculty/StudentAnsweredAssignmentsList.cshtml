@@ -41,10 +41,11 @@
                            
                             <th style="width: 100px;">AssignmentTitle</th>
                             <th style="width:100px;">Student Name</th>
-                            <th style="width: 100px;">Download</th>
-                            <th style="width: 100px;">Due Date</th>
+                            <th style="width: 80px;">Download</th>
+                            <th style="width: 60px;">Due Date</th>
                             <th style="width:60px;">Posted Date</th>
-                            <th style="width:100px;">Student Uploads</th>
+                            <th style="width:80px;">Student Uploads</th>
+                            <th style="width:80px;">Status</th>
                            
                             <th style="width:80px;">Action</th>
 
@@ -78,13 +79,13 @@
                                 {
                                     <td></td>
                                 }
-                           
+                                <td>@item.displaymAssignmentsStatus</td>
                                 <td>
                                     <a data="testpara=2&assignmentId=@item.mAssignmentId&studentId=@item.mStudentUsrId" data-toggle="modal" type="button" class="btngrid btnStudentEvaluation" style="cursor: pointer;padding-right: 18px;">
                                         <i class="pe-7s-pen" style="color:blueviolet;font-size:medium;font-weight:bold;"></i> </a>
                                  
                                 </td>
-
+                               
                         </tr>
 
                         }

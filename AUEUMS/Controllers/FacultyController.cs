@@ -375,77 +375,7 @@ namespace AUEUMS.Controllers
             return RedirectToAction("DashboardFaculty", "Admin");
 
         }
-
-        [HttpGet]
-        public IActionResult DownloadFile(long AssignmentId)
-        {
-            AssignmentsViewModel assignmentsViewModel = null;
-            ReturnObject returnObject = GetAssignmentsByRef(AssignmentId);
-            if (returnObject.assignmentsViewModel != null)
-            {
-                assignmentsViewModel = returnObject.assignmentsViewModel;
-            }
-
-            string uploadPath = Path.Combine(_env.WebRootPath, "Docs\\uploads");
-            string filePath = Path.Combine(uploadPath, assignmentsViewModel.UploadFileName);
-
-           // var path = Path.Combine(_hostingEnvironment.WebRootPath, "Sample.xlsx");
-           // var fs = new FileStream(filePath, FileMode.Open);
-
-            //  return File(fs, "application/octet-stream", assignmentsViewModel.UploadFileName);
-
-            //if (System.IO.File.Exists(filePath))
-            //{
-            //    return File(System.IO.File.OpenRead(filePath), "application/octet-stream", Path.GetFileName(filePath));
-            //}
-
-            try
-            {
-                using (var stream = System.IO.File.Open(filePath, FileMode.Open, FileAccess.Write, FileShare.ReadWrite))
-                {
-                    return File(stream, "application/octet-stream", assignmentsViewModel.UploadFileName);
-                }
-                
-                //if (string.IsNullOrEmpty(assignmentsViewModel.UploadFileName))
-                //{
-                //    return Content("Filename is not provided.");
-                //}
-                //filePath = Path.Combine(_env.WebRootPath, "uploads", assignmentsViewModel.UploadFileName);
-                //if (!System.IO.File.Exists(filePath))
-                //{
-                //    return Content("File not found.");
-                //}
-                //byte[] fileBytes = System.IO.File.ReadAllBytes(filePath);
-                //return File(fileBytes, "application/octet-stream", assignmentsViewModel.UploadFileName);
-            }
-            
-            catch (Exception ex)
-            {
-            }
-
-
-            //if (!System.IO.File.Exists(filePath))
-            //{
-            //    WebClient client = new WebClient();
-            //    Thread.Sleep(1000);
-            //    client.DownloadFile(filePath, assignmentsViewModel.UploadFileName);
-
-            //}
-
-            //string diretorio = Server.MapPath("~/Docs");
-
-            //var ext = ".pdf";
-            //file = file + extensao;
-            //var arquivo = Path.Combine(diretorio, file);
-            //var contentType = "application/pdf";
-
-            //using (var client = new WebClient())
-            //{
-            //    var buffer = client.DownloadData(arquivo);
-            //    return File(buffer, contentType);
-            //}
-            return Ok("File Download");
-        }
+       
 
 
         [ValidateAntiForgeryToken]

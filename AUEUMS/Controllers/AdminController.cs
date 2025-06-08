@@ -15,6 +15,10 @@ using Microsoft.Extensions.Options;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Hosting;
 using System.Net.Http.Json;
+using static System.Runtime.InteropServices.JavaScript.JSType;
+using Newtonsoft.Json.Linq;
+using System.Text.RegularExpressions;
+using System.Text;
 
 
 namespace AUEUMS.Controllers
@@ -1383,7 +1387,7 @@ namespace AUEUMS.Controllers
 
 
         [HttpPost]
-        public ActionResult GetAllQuotesJson([FromBody] DatatableParams datatableParams)
+        public ActionResult GetAllTimetableJson([FromBody] DatatableParams datatableParams)
         {
             string grpColumn = "CourseName";
             using (var client = new HttpClient())
@@ -1428,8 +1432,10 @@ namespace AUEUMS.Controllers
 
                 if (response.IsSuccessStatusCode)
                 {
-                    string quoteListJson = response.Content.ReadAsAsync<string>().Result;
-                    return Ok(quoteListJson);
+                    string tListJson = response.Content.ReadAsAsync<string>().Result;
+
+                    var tempListJson = JsonConvert.DeserializeObject(tListJson);
+                    return Ok(tempListJson);
                 }
                 else
                 {
@@ -1443,6 +1449,6 @@ namespace AUEUMS.Controllers
 
         }
         #endregion
-
+        
     }
 }

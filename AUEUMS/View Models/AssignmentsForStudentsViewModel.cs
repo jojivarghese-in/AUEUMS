@@ -76,7 +76,7 @@ namespace AUEUMS.View_Models
 
                     return mAssignmentsStatus;
                 else
-                    return "pending";
+                    return "Pending";
             }
         }
         public string displaymPostedDateTime
