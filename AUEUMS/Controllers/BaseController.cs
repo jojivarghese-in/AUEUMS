@@ -776,6 +776,40 @@ namespace AUEUMS.Controllers
             }
         }
 
+        public ReturnObject StudentAssignmentsFromFacultybyRef()
+        {
+
+            using (var client = new HttpClient())
+            {
+                string accessToken = getAccesssToken();
+                if (accessToken == "-1")
+                {
+                    return null;
+                }
+                else if (accessToken == "-2")
+                {
+                    return null;
+                }
+                client.BaseAddress = new Uri(Baseurl);
+                client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+                client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", getAccesssToken());
+                HttpResponseMessage response = client.
+                     GetAsync("Student/GetAssignmentsFromFacultyAsync").Result;
+                List<ReturnObject> ReturnObject = response.Content.
+                             ReadAsAsync<List<ReturnObject>>().Result;
+                if (response.IsSuccessStatusCode)
+                {
+                    return ReturnObject[0];
+                }
+                else
+                {
+                    ReturnObject returnObject = new ReturnObject();
+                    returnObject.Usermessage = "-3";
+                    string jsonresult = JsonConvert.SerializeObject(returnObject);
+                    return null;
+                }
+            }
+        }
         public ReturnObject GetAssignmentsForStudentsByRef(long AssignmentsId,long StudentId)
         {
 

@@ -11,6 +11,8 @@
     @Html.Hidden("AssignmentsAll", Url.Action("AssignmentsAll", "Faculty"))
     @Html.Hidden("StudentAssignments", Url.Action("StudentAssignments", "Student"))
     @Html.Hidden("StudentAssignmentsAll", Url.Action("StudentAssignmentsAll", "Student"))
+    @Html.Hidden("AssignmentsFromFacultyAll", Url.Action("AssignmentsFromFacultyAll", "Student"))
+    
     @Html.Hidden("StudentEvaluation", Url.Action("StudentEvaluation", "Faculty"))  
     @Html.Hidden("DashboardFaculty", Url.Action("DashboardFacultyHome", "Admin"))
     @Html.Hidden("DashboardStudent", Url.Action("DashboardStudentHome", "Admin"))
@@ -98,7 +100,8 @@
                             </div>
                             <div class="scroll-area-xs">
                                 <div class="scrollbar-container ps">
-                                    <button type="button" tabindex="1" class="dropdown-item" onclick="loadAssignmentsPostedAll()">Assignments Posted</button>
+                                    <button type="button" tabindex="1" class="dropdown-item" onclick="loadAssignmentsFromFacultyAll()">Assignments From Faculty</button>
+                                    <button type="button" tabindex="1" class="dropdown-item" onclick="loadAssignmentsPostedAll()">Assignments All</button>
                                     <button type="button" tabindex="2" class="dropdown-item">&nbsp;</button>
                                     <button type="button" tabindex="3" class="dropdown-item">&nbsp;</button>
                                     <button type="button" tabindex="4" class="dropdown-item">&nbsp;</button>
@@ -337,6 +340,15 @@
 
     function loadAssignmentsPostedAll() {
          $("#myPartialViewContainer").load($("#StudentAssignmentsAll").val() + "?mode=detail&ctrlid=ctrlId");
+         $("#displayquick").load($("#DefaultQuick").val());
+         $('#RightSlidingWindow').attr('class', 'ui-theme-settings');
+
+         $("#tabInternalSales").removeClass("show");
+         $("#tabExternalSales").removeClass("show");
+         $("#SettingsMenu").removeClass("show");
+     };
+     function loadAssignmentsFromFacultyAll() {
+         $("#myPartialViewContainer").load($("#AssignmentsFromFacultyAll").val() + "?mode=detail&ctrlid=ctrlId");
          $("#displayquick").load($("#DefaultQuick").val());
          $('#RightSlidingWindow').attr('class', 'ui-theme-settings');
 

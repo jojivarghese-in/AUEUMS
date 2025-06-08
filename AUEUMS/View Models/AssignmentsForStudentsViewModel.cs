@@ -99,6 +99,8 @@ namespace AUEUMS.View_Models
                     return "";
             }
         }
+ 
+      
         public string UsrFullName
         {
             get

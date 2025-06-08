@@ -1,4 +1,4 @@
-﻿@model AUEUMS.View_Models.AssignmentsForStudentsListViewModel
+﻿@model AUEUMS.View_Models.AssignmentsFornFacultyListViewModel
 
 
 @Html.Hidden("GetAssignmentsEdit", Url.Action("GetAssignmentsEdit", "Faculty"))
@@ -19,7 +19,7 @@
                     </i>
                 </div>
                 <div>
-                    <label id="headernameClie">Student Assignments List</label>
+                    <label id="headernameClie">Assignments Questions</label>
                     <div class="page-title-subheading">
 
                     </div>
@@ -42,51 +42,61 @@
                             <th style="width: 100px;">Download</th>
                             <th style="width: 60px;">Due Date</th>
                             <th style="width:60px;">Posted Date</th>
-                            <th style="width:100px;">Student Uploads</th>
-                            <th style="width:80px;">Status</th>
-                            
                             <th style="width:80px;">Action</th>
                            
                         </tr>
                     </thead>
                     <tbody>
-                        @foreach (var item in Model.assignmentsForStudents)
+                        @foreach (var item in Model.assignmentsForFaculty)
                         {
                         <tr>
                            
-                            <td>@item.mAssignmentTitle</td>
-                                @if (@item.mAssignmentsFileName != "" && @item.mAssignmentsFileName != null)
+                                <td>@item.DisplayAssignmentTitle</td>
+                                @if (@item.UploadFileName != "" && @item.UploadFileName != null)
                             {
-                                    <td><a href="~/uploads/@item.mAssignmentsFileName" target="_blank">Assignment</a></td>
+                                    <td><a href="~/uploads/@item.UploadFileName" target="_blank">Assignment</a></td>
                             }
                             else
                             {
                                 <td></td>
                             }
                          
-                            <td>@item.displaymDueDateTime</td>
-                            <td>@item.displaymPostedDateTime</td>
+                            <td>@item.displayDueDateTime</td>
+                            <td>@item.displayPostedDateTime</td>
 
-                                @if (@item.mAssignmentsSubmitFileName != "" && @item.mAssignmentsSubmitFileName !=null)
+                           
+                                @if(@item.displayDateExpiry==0)
                                 {
-                                    <td><a href="~/uploads/@item.mAssignmentsSubmitFileName" target="_blank">Answer Sheet</a></td>
+                                <td>
+                                    <div class="tooltipSlideLeft">
+                                    <a data="testpara=2&assignmentId=@item.Id" data-toggle="modal" type="button" class="btngrid btnUploadByStudent" style="cursor: pointer;padding-right: 18px;">
+                                            <i class="pe-7s-cloud-upload" style="color:#e83e8c;font-size:medium;font-weight:bold;"></i>
+                                     </a>
+                                    <span class="tooltiptextSlideLeft">
+                                       Upload
+                                    </span>
+
+                                   </div>
+                                
+                                </td>
                                 }
                                 else
                                 {
-                                    <td></td>
-                                }
-                                <td>@item.displaymAssignmentsStatus</td>
-                                <td>                              
-                                    <div class="tooltipSlideLeft">
-                                        <a data="testpara=2&assignmentId=@item.mAssignmentId&studentId=@item.mStudentUsrId" data-toggle="modal" type="button" class="btngrid btnSelectAssignment" style="cursor: pointer;padding-right: 18px;">
-                                            <i class="pe-7s-note" style="color:maroon;font-size:medium;font-weight:bold;"></i>
-                                        </a>
-                                        <span class="tooltiptextSlideLeft">
-                                            View
-                                        </span>
+                                <td> <b style="color:brown;font-size:small">Expired</b>
 
-                                    </div>
+                                <div class="tooltipSlideLeft">
+                                    <a data="testpara=2&assignmentId=@item.Id" data-toggle="modal" type="button" class="btngrid btnSelectAssignment" style="cursor: pointer;padding-right: 18px;">
+                                        <i class="pe-7s-note" style="color:maroon;font-size:medium;font-weight:bold;"></i>
+                                    </a>
+                                    <span class="tooltiptextSlideLeft">
+                                        View
+                                    </span>
+
+                                </div>
+                                
+                                
                                 </td>
+                                }
                                
                         </tr>
 

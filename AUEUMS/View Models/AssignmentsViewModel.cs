@@ -15,6 +15,38 @@ namespace AUEUMS.View_Models
         public IFormFile File { get; set; }
         public long? AsstId { get; set; }
         public long? StudentAsstId { get; set; }
+
+        public int displayDateExpiry
+        {
+            get
+            {
+                if (DueDateTime > PostedDateTime)
+
+                    return 0;
+                else
+                    return 1;
+            }
+        }
+        public string DisplayAssignmentTitle
+        {
+            get
+            {
+                if (AssignmentTitle != null)
+                {
+                    if (AssignmentTitle.Length > 100)
+                    {
+                        return AssignmentTitle.Substring(0, 95) + "....";
+
+                    }
+                    else
+                    {
+                        return AssignmentTitle;
+                    }
+                }
+                else
+                    return "";
+            }
+        }
         public string displayDueDateTime
         {
             get

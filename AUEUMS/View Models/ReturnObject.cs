@@ -42,6 +42,7 @@ namespace AUEUMS.View_Models
         public List<AssignmentsViewModel> assignmentsViewModels { get; set; }
         public StudentAssignmentsViewModel studentAssignmentsViewModel { get; set; }
         public List<StudentAssignmentsViewModel> studentAssignmentsViewModels { get; set; }
+        public AssignmentsFornFacultyListViewModel AssignmentsFornFacultyListViewModel { get; set; }
         public AssignmentsForStudentsViewModel assignmentsForStudentsViewModel { get; set; }
         public List<AssignmentsForStudentsViewModel> assignmentsForStudentsViewModels { get; set; }
         public TimetableHeaderViewModel timetableHeaderViewModel { get; set; }

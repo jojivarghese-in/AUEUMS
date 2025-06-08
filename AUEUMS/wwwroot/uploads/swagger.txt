@@ -1,0 +1,9 @@
+http://localhost:5001/swagger/index.html
+
+
+https://localhost:5001/api/StudentManager/GetAllStudentJsonAsync/1
+
+
+
+
+

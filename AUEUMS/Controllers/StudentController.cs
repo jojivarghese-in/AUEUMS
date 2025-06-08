@@ -71,6 +71,28 @@ namespace AUEUMS.Controllers
             }
         }
 
+
+        public IActionResult AssignmentsFromFacultyAll(string mode, string ctrlid)
+        {
+            ReturnObject returnObject = new ReturnObject();
+            returnObject = StudentAssignmentsFromFacultybyRef();
+            if (returnObject.assignmentsViewModels != null)
+            {
+                List<AssignmentsViewModel> studentAssignmentslist = returnObject.assignmentsViewModels;
+
+                AssignmentsFornFacultyListViewModel assignmentsListViewModel = new AssignmentsFornFacultyListViewModel();
+                assignmentsListViewModel.assignmentsForFaculty = studentAssignmentslist;
+                assignmentsListViewModel.mode = mode;
+                assignmentsListViewModel.ctrlid = ctrlid;
+                return PartialView("StudentAssignmentsFromFaculty", assignmentsListViewModel);
+            }
+            else
+            {
+                return PartialView("ExcpetionPartial");
+            }
+
+        }
+
         [ValidateAntiForgeryToken]
         public IActionResult UploadAssignmentByStudent(string mode, long AssignmentId,long StudentId)
         {
